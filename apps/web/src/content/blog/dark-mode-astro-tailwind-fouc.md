@@ -2,7 +2,6 @@
 title: 'Dark Mode in Astro with Tailwind CSS: Preventing FOUC'
 description: 'Prevent FOUC when implementing dark mode in your Astro projects using Tailwind CSS by placing a theme-setting script directly in your <head>.'
 pubDate: 'Jun 6 2025'
-heroImage: '/blog-placeholder-3.jpg'
 ---
 
 Adding dark mode to your website significantly enhances the user experience, especially for those who prefer less screen glare or work in low-light environments. When building with Astro and Tailwind CSS, you've got a powerful combination that makes implementing theme switching remarkably clean.

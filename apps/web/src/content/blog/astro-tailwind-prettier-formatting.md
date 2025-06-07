@@ -2,7 +2,6 @@
 title: 'Astro & Tailwind CSS: Perfectly Formatted with Prettier'
 description: 'Streamline your Astro and Tailwind CSS development. Learn how to integrate Prettier with its dedicated plugins to achieve clean, consistent, and automatically formatted code for your projects.'
 pubDate: 'Jun 5 2025'
-heroImage: '/astro-tailwind-prettier-formatting.png'
 ---
 
 Astro is a fantastic choice for building fast, content-focused websites. If you're also leveraging the utility-first power of Tailwind CSS, you know how quickly your HTML can become a string of classes.
