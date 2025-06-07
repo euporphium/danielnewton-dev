@@ -1,0 +1,91 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import FormattedDate from '../../components/FormattedDate.astro';
+
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={`${SITE_TITLE} - Privacy`} description={SITE_DESCRIPTION} />
+	</head>
+	<body class="min-h-dvh flex flex-col">
+		<Header />
+    <main class="px-4 py-2 max-w-3xl mx-auto">
+      <div class="prose-sm md:prose lg:prose-xl dark:prose-invert">
+        <h1>Privacy Policy</h1>
+        <p>Daniel Newton ('I', 'me', 'my') operates the website https://www.danielnewton.dev. This privacy policy describes how I handle personal data when you use my website.</p>
+
+        <h2>Data Controller</h2>
+        <p>Daniel Newton is the Data Controller for what is described in this Privacy Policy.</p>
+
+        <h2>Data Collection</h2>
+        <p>I do not collect personal data directly, but I use the following services that may collect data:</p>
+        <ul>
+          <li>PostHog: for web analytics, session replay, and error tracking</li>
+          <li>Vercel: for hosting</li>
+          <li>Proton: for email communication</li>
+        </ul>
+        <p>These services may collect different types of data according to their own privacy policies:
+          <a href="https://posthog.com/privacy">PostHog</a>,
+          <a href="https://vercel.com/legal/privacy-policy">Vercel</a>,
+          <a href="https://proton.me/legal/privacy">Proton</a>.
+        </p>
+
+        <h2>Legal Basis for Processing</h2>
+        <p>I process data based on:</p>
+        <ul>
+          <li>Consent: Through my cookie banner, you can explicitly consent to the use of analytical and tracking cookies.</li>
+          <li>Legitimate Interest: For understanding my audience and improving my services.</li>
+        </ul>
+
+        <h2>Data Transfer</h2>
+        <p>Some data is processed outside the European Economic Area (EEA), for example by PostHog. This transfer is protected by appropriate safeguards, including Standard Contractual Clauses (SCC).</p>
+
+        <h2>Retention Period</h2>
+        <p>I retain data only as long as necessary for the purposes outlined in this policy. Third-party services retain data according to their own retention policies. You can request deletion of your data at any time by contacting me.</p>
+
+        <h2>Security</h2>
+        <p>The security of your personal information is important to me. I implement the following security measures:</p>
+        <ul>
+          <li>Data encryption via HTTPS/TLS</li>
+          <li>IP anonymization where applicable</li>
+          <li>Limited access controls</li>
+          <li>Regular security updates</li>
+        </ul>
+        <p>However, remember that no method of transmission over the Internet, or method of electronic storage, is 100% secure. While I strive to use commercially acceptable means to protect your personal information, I cannot guarantee its absolute security.</p>
+
+        <h2>Your Rights</h2>
+        <p>Under the GDPR, you have the following rights:</p>
+        <ul>
+          <li>Right to information about the processing of your data</li>
+          <li>Right to access your data</li>
+          <li>Right to rectification of incorrect data</li>
+          <li>Right to erasure ('right to be forgotten')</li>
+          <li>Right to restriction of processing</li>
+          <li>Right to data portability</li>
+          <li>Right to object to processing</li>
+          <li>Right not to be subject to automated decision-making</li>
+        </ul>
+
+        <h2>Cookies</h2>
+        <p>I use cookies for:</p>
+        <ul>
+          <li>Analytical purposes (PostHog)</li>
+          <li>Session Recording and error tracking (PostHog)</li>
+        </ul>
+        <p>You can manage your cookie preferences through my cookie banner or your browser settings.</p>
+
+        <h2>Changes to this Privacy Policy</h2>
+        <p>This Privacy Policy is effective as of <FormattedDate date={new Date(2025, 6 - 1, 7)} /> and will remain in effect except with respect to any changes in its provisions in the future, which will be in effect immediately after being posted on this page.</p>
+        <p>I reserve the right to update or change this Privacy Policy at any time and you should check this Privacy Policy periodically.</p>
+
+        <h2>Contact</h2>
+        <p>For questions about this privacy policy or your data, please send me an email at <a href="mailto:privacy@danielnewton.dev">privacy@danielnewton.dev</a>.</p>
+      </div>
+    </main>
+		<Footer />
+	</body>
+</html>
