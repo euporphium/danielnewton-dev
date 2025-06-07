@@ -1,0 +1,36 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body class="min-h-dvh flex flex-col">
+		<Header />
+		<main class="px-4 py-2 flex">
+      <div class="mx-auto w-[65ch] prose">
+        <p>
+          Hey there, I'm Daniel! I have been a full-stack software engineer since 2015 and have experience building scalable web applications and leading development teams. I'm passionate about solving complex problems with clean, maintainable code and have a track record of turning ambitious ideas into successful products.
+        </p>
+
+        <p>
+          Currently, I'm a Team Lead at Payscale where I guide a team of developers while architecting everything from payment integrations to credit systems. My journey has taken me through startups and established companies, working with technologies spanning React and Next.js on the frontend to C# and .NET on the backend, with plenty of cloud infrastructure (Azure, AWS) in between.
+        </p>
+
+        <p>
+          When I'm not coding, you'll find me exploring new technologies, tinkering with side projects, or writing about whatever's caught my interest lately on this blog. I believe the best developers are lifelong learners, so I'm always diving into something new.
+        </p>
+
+        <p>
+          I work remotely and love the flexibility it provides to focus on what matters most: building great software and fostering collaborative teams. If you're interested in connecting or want to chat about technology, leadership, or anything else, feel free to reach out!
+        </p>
+      </div>
+		</main>
+		<Footer />
+	</body>
+</html>

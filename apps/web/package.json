@@ -1,9 +1,9 @@
 {
-  "name": "@danielnewton-dev/blog",
+  "name": "@danielnewton-dev/web",
   "version": "0.0.1",
   "private": true,
   "nx": {
-    "name": "blog"
+    "name": "web"
   },
   "scripts": {
     "dev": "nx exec -- astro dev",
@@ -15,7 +15,11 @@
     "@astrojs/mdx": "^4.3.0",
     "@astrojs/rss": "^4.0.11",
     "@astrojs/sitemap": "^3.4.0",
+    "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/vite": "^4.1.8",
     "astro": "^5.8.1",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.3.0",
     "vite": "^6.3.5"
   }
 }
