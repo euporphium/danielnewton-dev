@@ -1,0 +1,33 @@
+<div id="cookie-consent-banner" class="fixed bottom-2 left-2 right-2 z-50 bg-gray-900 text-white px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-2 border rounded" style="display:none;">
+  <span>
+    This website uses data collection to enhance the browsing experience. Read my <a href="/privacy" class="underline hover:text-blue-300">privacy policy</a> for more information.
+  </span>
+  <div class="flex gap-2 mt-2 md:mt-0">
+    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded" id="cookie-accept">Accept</button>
+    <button class="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded" id="cookie-reject">Reject</button>
+  </div>
+</div>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function () {
+    const consent = localStorage.getItem('cookie_consent');
+    const banner = document.getElementById('cookie-consent-banner');
+    if (!consent && banner) {
+      banner.style.display = 'flex';
+    }
+    const acceptBtn = document.getElementById('cookie-accept');
+    const rejectBtn = document.getElementById('cookie-reject');
+    if (acceptBtn) {
+      acceptBtn.onclick = function () {
+        if (window.handleCookieConsent) window.handleCookieConsent('yes');
+        if (banner) banner.style.display = 'none';
+      };
+    }
+    if (rejectBtn) {
+      rejectBtn.onclick = function () {
+        if (window.handleCookieConsent) window.handleCookieConsent('no');
+        if (banner) banner.style.display = 'none';
+      };
+    }
+  });
+</script> 
