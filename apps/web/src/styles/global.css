@@ -4,3 +4,8 @@
 body {
   @apply bg-white dark:bg-gray-900 dark:text-gray-100;
 }
+
+/* Allow inline code to wrap on small screens */
+.prose-sm code {
+  word-break: break-word;
+}

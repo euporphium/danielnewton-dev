@@ -57,7 +57,8 @@ Let's recap what this script does:
 
 *   **`document.documentElement.classList.toggle("dark", condition)`**: This method is the star here. It adds or removes the `"dark"` class on the `<html>` element based on the `condition`'s boolean value.
 *   **`localStorage.theme === "dark"`**: It first checks if the user has an explicit preference for dark mode stored locally. This gives users control.
-*   **`!('theme' in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches`**: If no explicit preference is found, it gracefully falls back to checking the user's operating system's dark mode preference.
+*   **`!('theme' in localStorage)`**: If no explicit preference is found in localStorage, it checks this condition first.
+*   **`window.matchMedia("(prefers-color-scheme: dark)").matches`**: Then it gracefully falls back to checking the user's operating system's dark mode preference.
 
 By putting this script in the `<head>`, we're telling the browser, "Hey, figure out the theme right now, *before* you render anything, so Tailwind knows which styles to apply from the get-go."
 
