@@ -1,0 +1,58 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import CookieConsent from '../components/CookieConsent.astro';
+
+type Props = CollectionEntry<'projects'>['data'];
+
+const { title, description, date, tags, liveUrl, repoUrl } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+	<body>
+		<Header />
+		<main class="px-4 pt-4 pb-8 flex">
+			<article class="mx-auto">
+				<div>
+					<div>
+						<div class="mb-4">
+							<FormattedDate date={date} />
+						</div>
+						<h1 class="text-3xl max-w-prose mb-4">{title}</h1>
+						<div class="flex flex-wrap gap-2 mb-4">
+							{tags.map((tag) => (
+								<span class="text-sm px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded">
+									{tag}
+								</span>
+							))}
+						</div>
+						<div class="flex gap-4 mb-4">
+							{liveUrl && (
+								<a href={liveUrl} target="_blank" rel="noopener noreferrer" class="underline">
+									View Live Site →
+								</a>
+							)}
+							{repoUrl && (
+								<a href={repoUrl} target="_blank" rel="noopener noreferrer" class="underline">
+									View Source →
+								</a>
+							)}
+						</div>
+						<hr class="my-4" />
+					</div>
+					<div class="prose-sm md:prose lg:prose-xl prose-pre:w-0 prose-pre:min-w-full dark:prose-invert">
+						<slot />
+					</div>
+				</div>
+			</article>
+		</main>
+		<CookieConsent />
+		<Footer />
+	</body>
+</html>

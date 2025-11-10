@@ -1,0 +1,61 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE } from '../../consts';
+import { getCollection } from 'astro:content';
+import CookieConsent from '../../components/CookieConsent.astro';
+
+const projects = (await getCollection('projects')).sort(
+	(a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={`Projects | ${SITE_TITLE}`} description="Portfolio of web development projects by Daniel Newton" />
+	</head>
+	<body class="min-h-dvh flex flex-col">
+		<Header />
+		<main>
+			<section class="flex p-8">
+				<div class="mx-auto w-[65ch]">
+					<h1 class="text-4xl font-bold mb-8">Projects</h1>
+					<ul class="grid gap-8">
+						{
+							projects.map((project) => (
+								<li class="border-l-4 border-current pl-4">
+									<a href={`/projects/${project.id}/`}>
+										<h2 class="text-2xl font-semibold mb-2">{project.data.title}</h2>
+									</a>
+									<p class="mb-3 text-gray-700 dark:text-gray-300">{project.data.description}</p>
+									<div class="flex flex-wrap gap-2 mb-3">
+										{project.data.tags.map((tag) => (
+											<span class="text-sm px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded">
+												{tag}
+											</span>
+										))}
+									</div>
+									<div class="flex gap-4 text-sm">
+										{project.data.liveUrl && (
+											<a href={project.data.liveUrl} target="_blank" rel="noopener noreferrer" class="underline">
+												View Live Site →
+											</a>
+										)}
+										{project.data.repoUrl && (
+											<a href={project.data.repoUrl} target="_blank" rel="noopener noreferrer" class="underline">
+												View Source →
+											</a>
+										)}
+									</div>
+								</li>
+							))
+						}
+					</ul>
+				</div>
+			</section>
+		</main>
+		<CookieConsent />
+		<Footer />
+	</body>
+</html>
