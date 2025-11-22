@@ -1,0 +1,210 @@
+---
+title: 'Building an Accessible Marquee Component in React'
+description: 'Learn how to create a smooth, accessible marquee component in React using CSS animations and custom properties. Includes support for pause on hover, reduced motion preferences, and proper ARIA attributes.'
+pubDate: 'Nov 22 2025'
+---
+
+import Marquee from '../../components/Marquee.tsx';
+
+Marquee components are eye-catching UI elements that continuously scroll content across the screen. They're perfect for announcements, promotional messages, or highlighting important information on your website.
+
+In this post, I'll walk you through building a flexible, accessible marquee component in React that respects user preferences and provides a smooth scrolling experience.
+
+## Why Build a Custom Marquee?
+
+While the classic `<marquee>` HTML tag existed in the past, it's long been deprecated. Modern web development calls for a more robust, accessible solution. A custom React component gives us:
+
+*   **Full control** over animation speed, direction, and behavior
+*   **Accessibility features** like motion preference detection
+*   **Flexible styling** that integrates with modern CSS frameworks
+*   **Interactive states** like pause on hover or click
+
+## The Implementation Strategy
+
+Our marquee component uses a clever technique: rendering the content twice in a continuous loop. This creates a seamless infinite scroll effect. Here's the approach:
+
+1. Use CSS animations for smooth, hardware-accelerated scrolling
+2. Leverage CSS custom properties for dynamic configuration
+3. Render duplicate tracks for seamless looping
+4. Add accessibility support for reduced motion and screen readers
+
+## Building the Component
+
+### The Component Structure
+
+Let's start with the TypeScript interfaces and main component:
+
+```tsx
+"use client";
+
+import { cn } from "@/util/cn";
+
+interface MarqueeProps {
+  messages: readonly string[];
+  duration?: number;
+  pauseOnHover?: boolean;
+  pauseOnClick?: boolean;
+  className?: string;
+}
+
+interface MarqueeTrackProps {
+  messages: readonly string[];
+  ariaHidden?: boolean;
+}
+
+function MarqueeTrack({ messages, ariaHidden = false }: MarqueeTrackProps) {
+  return (
+    <div
+      className="marquee flex-none flex items-center"
+      aria-hidden={ariaHidden || undefined}
+    >
+      <div className="flex-none flex items-center">
+        {messages.map((message) => (
+          <div key={message} className="whitespace-nowrap px-8 typo-promo">
+            <p>{message}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function Marquee({
+  messages,
+  duration = 25,
+  pauseOnHover = false,
+  pauseOnClick = false,
+  className,
+}: MarqueeProps) {
+  return (
+    <div
+      className={cn(
+        "marquee-container overflow-x-hidden flex relative w-full py-4 bg-brand-main text-neutral-light",
+        className,
+      )}
+      style={
+        {
+          "--marquee-duration": `${duration}s`,
+          "--marquee-pause-hover": pauseOnHover ? "paused" : "running",
+          "--marquee-pause-click": pauseOnClick ? "paused" : "running",
+        } as React.CSSProperties
+      }
+    >
+      <MarqueeTrack messages={messages} />
+      <MarqueeTrack messages={messages} ariaHidden />
+    </div>
+  );
+}
+```
+
+The component accepts an array of messages and optional configuration for animation duration and pause behavior. Notice how we render `MarqueeTrack` twice—once for the visible content and once with `aria-hidden` for the seamless loop effect.
+
+### The CSS Animation
+
+The magic happens in the CSS. Here's the stylesheet that powers the animation:
+
+```css
+.marquee {
+  animation: marquee-scroll var(--marquee-duration, 25s) linear infinite;
+}
+
+.marquee-container:hover .marquee {
+  animation-play-state: var(--marquee-pause-hover, running);
+}
+
+.marquee-container:active .marquee {
+  animation-play-state: var(--marquee-pause-click, running);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+```
+
+The animation continuously translates the content from right to left. By using CSS custom properties (`--marquee-duration`, `--marquee-pause-hover`, `--marquee-pause-click`), we can dynamically control the animation from our React component.
+
+## Accessibility Considerations
+
+This implementation includes several accessibility features:
+
+### Reduced Motion Support
+
+The `@media (prefers-reduced-motion: reduce)` query automatically pauses the animation for users who have indicated they prefer reduced motion in their system settings. This is crucial for users with vestibular disorders or motion sensitivity.
+
+### ARIA Attributes
+
+The second `MarqueeTrack` is marked with `aria-hidden` to prevent screen readers from announcing the duplicate content. This ensures users with screen readers hear the messages only once.
+
+### Semantic HTML
+
+Using proper semantic elements like `<p>` tags ensures the content is properly interpreted by assistive technologies.
+
+## Using the Marquee Component
+
+Here's how to integrate the marquee into your application:
+
+```tsx
+import Marquee from '@/components/Marquee';
+
+const MESSAGES = [
+  'Welcome to our site!',
+  'Check out our latest blog posts',
+  'New features coming soon'
+];
+
+export default function HomePage() {
+  return (
+    <main>
+      <Marquee
+        messages={MESSAGES}
+        duration={30}
+        pauseOnHover={true}
+      />
+      {/* Rest of your page content */}
+    </main>
+  );
+}
+```
+
+### Live Demo
+
+Try it out! Hover over the marquee below to pause the animation:
+
+<Marquee
+  client:load
+  messages={['Welcome to our site!', 'Check out our latest blog posts', 'New features coming soon']}
+  duration={20}
+  pauseOnHover={true}
+/>
+
+## Configuration Options
+
+The component is highly configurable:
+
+*   **messages**: Array of strings to display in the marquee
+*   **duration**: Animation duration in seconds (default: 25)
+*   **pauseOnHover**: Pause animation when hovering (default: false)
+*   **pauseOnClick**: Pause animation when clicking (default: false)
+*   **className**: Additional CSS classes for custom styling
+
+## Conclusion
+
+Building a custom marquee component gives you complete control over the scrolling animation while ensuring accessibility and modern web standards. Key benefits include:
+
+*   **Smooth performance** using CSS animations
+*   **Accessibility** with reduced motion support and proper ARIA attributes
+*   **Flexibility** through configurable duration and pause behaviors
+*   **Seamless looping** without visual jumps or gaps
+
+This approach provides a solid foundation that you can customize further based on your specific needs. Whether you're showcasing announcements, promotional content, or any continuously scrolling information, this marquee component delivers a professional, accessible solution.
