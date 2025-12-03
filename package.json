@@ -7,7 +7,6 @@
   "devDependencies": {
     "@astrojs/react": "^4.4.2",
     "@nx/js": "22.1.1",
-    "@nx/next": "22.1.1",
     "@swc-node/register": "~1.9.2",
     "@swc/core": "~1.5.29",
     "@swc/helpers": "~0.5.17",
