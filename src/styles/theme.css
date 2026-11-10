@@ -10,25 +10,31 @@
   --font-app: var(--font-google-sans-code);
 }
 
+/*
+ * Site palette: warm neutrals with one deep-teal accent in both modes.
+ * Every text pairing meets WCAG AA (>= 4.5:1). Light: foreground 14.6:1,
+ * accent 6.2:1, muted text 6.1:1 on background. Dark: 14.1:1, 8.4:1, 7.5:1.
+ */
+
 /* Light theme values */
 :root,
 [data-theme="light"] {
-  --background: #fdfdfd;
-  --foreground: #282728;
-  --accent: #006cac;
+  --background: #fbfbf9;
+  --foreground: #24262b;
+  --accent: #0b6b5a;
   --accent-foreground: #ffffff;
-  --muted: #e6e6e6;
-  --muted-foreground: #6b7280;
-  --border: #ece9e9;
+  --muted: #e8e9e6;
+  --muted-foreground: #5b6067;
+  --border: #e1e3df;
 }
 
 /* Dark theme values */
 [data-theme="dark"] {
-  --background: #212737;
-  --foreground: #eaedf3;
-  --accent: #ff6b01;
-  --accent-foreground: #ffffff;
-  --muted: #343f60;
-  --muted-foreground: #afb9ca;
-  --border: #ab4b08;
+  --background: #16191d;
+  --foreground: #e4e6e9;
+  --accent: #5ec4ad;
+  --accent-foreground: #0d1a17;
+  --muted: #262b31;
+  --muted-foreground: #a3aab3;
+  --border: #30363d;
 }
