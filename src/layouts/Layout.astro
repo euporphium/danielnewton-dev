@@ -5,6 +5,9 @@ import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
 import { getAssetPath } from "@/utils/withBase";
 import config from "@/config";
 import "@/styles/global.css";
+import SpeedInsights from "@vercel/speed-insights/astro";
+import PostHog from "@/components/site/PostHog.astro";
+import CookieConsent from "@/components/site/CookieConsent.astro";
 
 type Props = {
   title?: string;
@@ -110,12 +113,17 @@ const rssHref = getAssetPath("rss.xml");
       })();
     </script>
 
+    <!-- Site-specific: analytics (consent-gated storage) and Speed Insights -->
+    <PostHog />
+    <SpeedInsights />
+
     <ClientRouter />
   </head>
   <body
     class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col"
   >
     <slot />
+    <CookieConsent />
     <script>
       import "@/scripts/theme";
     </script>
