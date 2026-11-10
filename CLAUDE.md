@@ -1,117 +1,122 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for AI agents working in this repository.
 
-## Workspace Overview
+## Overview
 
-This is an Nx monorepo using pnpm as the package manager. The repository contains a personal website/blog built with Astro.
+Personal site and blog for Daniel Newton (https://www.danielnewton.dev), built on the
+[AstroPaper](https://github.com/satnaing/astro-paper) theme (Astro 7, Tailwind CSS 4,
+MDX). It's a single package at the repo root, managed with pnpm and deployed by Vercel.
 
-**Key Technologies:**
-- Nx 21.1.2 for monorepo management
-- Astro 5.x for static site generation
-- Tailwind CSS v4 for styling
-- TypeScript for type safety
-- MDX for blog content
+AstroPaper is merged in as git history, not installed as a package. Theme updates
+arrive with `git merge` (see "Updating AstroPaper"), so **keep edits to theme files
+small and deliberate**.
 
-## Project Structure
+## Commands
 
-```
-apps/
-  web/               # Main Astro website/blog
-    src/
-      components/    # Astro components (Header, Footer, BaseHead, etc.)
-      content/       # Content collections (blog posts)
-      layouts/       # Page layouts (BlogPost)
-      pages/         # Astro pages and routes
-      styles/        # Global styles
-    astro.config.mjs # Astro configuration
-libs/                # Currently empty, reserved for shared libraries
-```
-
-## Common Commands
-
-**Development:**
 ```bash
-# Start dev server for web app
-pnpm nx dev web
-
-# Build web app for production
-pnpm nx build web
-
-# Preview production build
-pnpm nx preview web
-
-# Type checking (currently disabled due to tsconfig settings)
-pnpm nx typecheck web
+pnpm install
+pnpm dev             # dev server
+pnpm build           # astro check + astro build + Pagefind search index
+pnpm preview         # serve dist/
+pnpm check:content   # content source rules (markers, placeholder links, dates, tags)
+pnpm check:urls      # published URLs, canonicals, RSS GUIDs and dates in dist/
+pnpm check:urls --base https://<deployment>   # same, against a deployment
+# Protected Vercel previews: set VERCEL_AUTOMATION_BYPASS_SECRET first
+pnpm check:links     # internal links in dist/ resolve
+pnpm lint
+pnpm format:check
 ```
 
-**Nx Commands:**
+CI: `.github/workflows/ci.yml` (AstroPaper's: lint, format, build) and
+`.github/workflows/site-checks.yml` (content, build, URL parity, links).
+
+Node >= 22.23.4.
+
+## Where things live
+
+| Path | What |
+| --- | --- |
+| `astro-paper.config.ts` | Site identity, feature flags, socials, share links. **Prefer changing behaviour here** |
+| `src/styles/theme.css` | Color tokens (intended customization point) |
+| `src/content/posts/` | Blog posts (`.md`/`.mdx`). Filename = slug = URL `/blog/<slug>/` |
+| `src/content/projects/` | Projects (site-specific collection) |
+| `src/content/pages/about.md` | About page |
+| `src/content.config.ts` | Collection schemas |
+| `src/components/site/` | Site-specific components: PostHog, cookie consent, project metadata |
+| `src/pages/projects/`, `src/pages/privacy.astro` | Site-specific pages |
+| `scripts/` | Repo checks and `url-baseline.json` |
+| `.github/pull_request_template.md` | Article PR checklist (sources, verification log) |
+| `vercel.json` | Vercel install/build/output settings |
+
+## Deliberate changes to AstroPaper files
+
+Keep this list current. It's what to re-check after an upstream merge.
+
+- Posts are served at `/blog/` instead of `/posts/`: `src/pages/posts` was renamed to
+  `src/pages/blog`, plus `src/utils/getPostPaths.ts`, `src/components/Header.astro`
+  (nav link + active state), `src/components/Breadcrumb.astro` and
+  `src/pages/index.astro`. Published URLs must not change.
+- `Header.astro` has a Projects nav link; `Breadcrumb.astro` has a `projects` label.
+- `src/layouts/Layout.astro` mounts PostHog, Speed Insights and the cookie banner.
+- `src/components/Footer.astro` links to `/privacy/`.
+- `src/pages/index.astro` hero text and meta description are the site's own.
+- `src/i18n/lang/en.ts`: "Posts" labels read "Blog".
+- `src/styles/theme.css` holds the site palette; `public/favicon.svg` is the DN monogram.
+- `astro.config.ts` adds `@astrojs/react` (React islands in MDX, e.g. `Marquee`) and
+  uses the `github-light-default`/`github-dark-default` Shiki themes (AstroPaper's
+  defaults fail WCAG AA contrast for comments).
+- `src/pages/blog/[...slug]/index.astro`: heading `#` anchor links get an `aria-label`.
+- `src/content.config.ts` adds the `projects` collection.
+- `.prettierrc` disables formatting inside code blocks in content files, so published
+  code samples stay exactly as written.
+- Removed: AstroPaper's sample posts and images, `public/default-og.jpg` (pages use the
+  generated `/og.png`), FUNDING.yml, issue/PR templates, Docker and commitizen files.
+
+## Content conventions
+
+- Required frontmatter: `title`, `description`, `pubDatetime`, `tags`.
+- Write `pubDatetime`/`modDatetime` with a time and explicit offset, e.g.
+  `2025-06-08T12:00:00-05:00`. Dates are displayed in `America/Chicago`. A bare
+  date or a UTC-midnight time shows as the previous day.
+- Tags are lowercase kebab-case. Reuse existing tags (see `/tags/`) before adding new ones.
+- Set `modDatetime` only for meaningful content updates: it shows "Updated" and moves
+  the post's RSS date. Link or typo fixes don't count.
+- `draft: true` and future dates hide a post in production builds, **including Vercel
+  previews**. To preview a new post on a PR, leave `draft` off and use today's date.
+  Merging the PR is what publishes it.
+- Never rename a published post file: the filename is its URL. Published URLs are
+  listed in `scripts/url-baseline.json`; add new posts there once they're live.
+- Images: put them next to the post (or in `src/assets/`) and reference them relatively
+  so Astro optimizes them.
+
+## Writing and publishing articles
+
+The pull request is the approval gate. Agents may research, draft, verify and open
+PRs; **only Daniel merges an article PR**, and merging publishes it.
+
+1. Branch `post/<slug>`; add `src/content/posts/<slug>.md` (`.mdx` only if it needs a
+   component).
+2. Fill in the PR template: the Sources table, the Verification log, and AI assistance.
+3. Rules for drafted text:
+   - Never write personal experience, opinions, anecdotes or claims about Daniel's
+     work. Leave a marker instead, e.g. `[[DANIEL: what went wrong the first time?]]`.
+     CI fails while any marker remains.
+   - Every non-obvious factual claim needs a source in the PR's Sources table. Never
+     invent or guess a citation or URL. If a source can't be found, say so in the PR.
+   - Run every code sample and command before including it, and record versions and
+     output in the Verification log. Mark anything that couldn't be run.
+   - Match the voice of existing posts: direct, practical, first person, no hype.
+4. CI must pass, and the Vercel preview gets reviewed, before merge.
+
+## Updating AstroPaper
+
 ```bash
-# Run any target for a project
-pnpm nx <target> <project-name>
-
-# Visualize project graph
-pnpm nx graph
-
-# Sync TypeScript project references
-pnpm nx sync
-
-# Check if TypeScript references are in sync (for CI)
-pnpm nx sync:check
+git fetch astro-paper --tags     # remote: https://github.com/satnaing/astro-paper.git
+git merge vX.Y.Z                  # one release at a time; read its release notes first
 ```
 
-**Code Quality:**
-```bash
-# Format code with Prettier (Astro + Tailwind plugins)
-pnpm prettier --write .
-```
-
-## Architecture Notes
-
-**Content Collections:**
-- Blog posts are stored in `apps/web/src/content/blog/` as Markdown/MDX files
-- Content schema is defined in `apps/web/src/content.config.ts` using Zod
-- Schema includes: title, description, pubDate, updatedDate (optional)
-- Uses Astro's glob loader for content collection
-
-**Routing:**
-- File-based routing in `apps/web/src/pages/`
-- Main routes: `/` (home), `/blog/` (blog index), `/projects/`, `/privacy/`
-- Dynamic blog post routes handled via Astro's content collections
-- RSS feed generated at `/rss.xml`
-- Robots.txt generated at `/robots.txt`
-
-**Styling:**
-- Tailwind CSS v4 integrated via Vite plugin
-- Prettier configured with tailwindcss plugin for class sorting
-- Typography plugin enabled for markdown content
-
-**Analytics & Tracking:**
-- PostHog integration (see `components/posthog.astro`)
-- Vercel Speed Insights enabled
-- Cookie consent component (`components/CookieConsent.astro`)
-
-**SEO:**
-- Sitemap generation via `@astrojs/sitemap`
-- Site URL: https://www.danielnewton.dev
-- BaseHead component handles meta tags, Open Graph, and canonical URLs
-
-## Development Workflow
-
-**Adding Blog Posts:**
-1. Create new `.md` or `.mdx` file in `apps/web/src/content/blog/`
-2. Include required frontmatter: title, description, pubDate
-3. Optionally add updatedDate for content updates
-4. Content will be automatically picked up by the glob loader
-
-**Nx Integration:**
-- All scripts are wrapped with `nx exec` for proper task orchestration
-- Nx manages task caching and dependencies
-- Project type is marked as "library" (not "application") in Nx metadata
-
-## Important Files
-
-- `apps/web/src/consts.ts` - Site metadata and global constants
-- `apps/web/astro.config.mjs` - Astro configuration (MDX, sitemap integrations)
-- `pnpm-workspace.yaml` - Workspace package configuration
-- `.prettierrc` - Code formatting rules
+Expect conflicts where upstream changes files listed above, and modify/delete conflicts
+for upstream sample posts and removed files (resolve with `git rm`). Then run
+`pnpm build`, `pnpm check:content`, `pnpm check:urls`, `pnpm check:links`, `pnpm lint`
+and `pnpm format:check`.

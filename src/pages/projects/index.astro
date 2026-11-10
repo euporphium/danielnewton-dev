@@ -1,0 +1,41 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import Main from "@/components/Main.astro";
+import Footer from "@/components/Footer.astro";
+import ProjectMeta from "@/components/site/ProjectMeta.astro";
+import config from "@/config";
+
+const projects = (await getCollection("projects")).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<Layout
+  title={`Projects | ${config.site.title}`}
+  description="Portfolio of web development projects by Daniel Newton"
+>
+  <Header />
+  <Breadcrumb />
+  <Main pageTitle="Projects" pageDesc="Things I've built.">
+    <ul>
+      {
+        projects.map(({ id, data }) => (
+          <li class="my-6">
+            <a
+              href={`/projects/${id}/`}
+              class="text-accent inline-block text-lg font-medium decoration-dashed underline-offset-4 hover:underline focus-visible:no-underline"
+            >
+              <h2>{data.title}</h2>
+            </a>
+            <ProjectMeta {...data} />
+            <p>{data.description}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </Main>
+  <Footer />
+</Layout>

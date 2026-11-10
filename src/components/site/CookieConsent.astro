@@ -1,0 +1,60 @@
+---
+// Site-specific (not part of AstroPaper): consent banner for PostHog storage.
+//
+// `transition:persist` keeps the same banner element across ClientRouter
+// navigations, so an unanswered banner stays visible (and its listeners stay
+// attached) until the visitor chooses. The choice is stored in localStorage
+// and read by PostHog.astro.
+---
+
+<section
+  id="cookie-consent-banner"
+  aria-label="Cookie consent"
+  transition:persist
+  hidden
+  class="border-border bg-background text-foreground fixed inset-x-2 bottom-2 z-50 flex flex-col items-center justify-between gap-3 rounded border px-4 py-4 shadow-lg sm:flex-row"
+>
+  <p>
+    This website uses data collection to enhance the browsing experience. Read
+    my{" "}
+    <a
+      href="/privacy/"
+      class="hover:text-accent underline decoration-dashed underline-offset-4"
+      >privacy policy</a
+    >{" "}
+    for more information.
+  </p>
+  <div class="flex shrink-0 gap-2">
+    <button
+      type="button"
+      data-consent="yes"
+      class="bg-accent text-accent-foreground rounded px-4 py-2 font-medium"
+    >
+      Accept
+    </button>
+    <button
+      type="button"
+      data-consent="no"
+      class="border-foreground rounded border px-4 py-2 font-medium"
+    >
+      Reject
+    </button>
+  </div>
+</section>
+
+<script>
+  const banner = document.getElementById("cookie-consent-banner");
+
+  if (banner && !localStorage.getItem("cookie_consent")) {
+    banner.hidden = false;
+  }
+
+  banner?.addEventListener("click", event => {
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>(
+      "button[data-consent]"
+    );
+    if (!button) return;
+    window.handleCookieConsent?.(button.dataset.consent as "yes" | "no");
+    banner.hidden = true;
+  });
+</script>

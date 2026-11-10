@@ -1,0 +1,40 @@
+---
+// Site-specific (not part of AstroPaper): date, tags and links for a project.
+import type { CollectionEntry } from "astro:content";
+import Datetime from "@/components/Datetime.astro";
+
+type Props = Pick<
+  CollectionEntry<"projects">["data"],
+  "date" | "tags" | "liveUrl" | "repoUrl"
+>;
+
+const { date, tags, liveUrl, repoUrl } = Astro.props;
+---
+
+<div class="text-muted-foreground my-1 flex flex-wrap items-center gap-x-4">
+  {/* Project dates are date-only (UTC midnight), so render them in UTC. */}
+  <Datetime pubDatetime={date} timezone="UTC" />
+  {tags.length > 0 && <span class="text-sm">{tags.join(" · ")}</span>}
+</div>
+{
+  (liveUrl || repoUrl) && (
+    <p class="my-1 flex gap-4 text-sm">
+      {liveUrl && (
+        <a
+          href={liveUrl}
+          class="hover:text-accent underline decoration-dashed underline-offset-4"
+        >
+          Live site
+        </a>
+      )}
+      {repoUrl && (
+        <a
+          href={repoUrl}
+          class="hover:text-accent underline decoration-dashed underline-offset-4"
+        >
+          Source
+        </a>
+      )}
+    </p>
+  )
+}

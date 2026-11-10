@@ -1,0 +1,48 @@
+# Site-specific checks (not part of AstroPaper; its ci.yml covers lint,
+# format and build). Kept in a separate file so theme updates to ci.yml
+# merge cleanly.
+name: Site checks
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  site-checks:
+    name: Content, links & URL parity
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+        with:
+          version: "11.3.0"
+
+      - name: Use Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check content source
+        run: pnpm run check:content
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Check published URLs, canonicals, RSS GUIDs and dates
+        run: pnpm run check:urls
+
+      - name: Check internal links
+        run: pnpm run check:links
