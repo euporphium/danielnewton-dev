@@ -36,10 +36,17 @@ let checked = 0;
 for (const file of htmlFiles) {
   const html = await readFile(file, "utf8");
   for (const [, href] of html.matchAll(/<a\s[^>]*?href="([^"]+)"/g)) {
-    let pathname;
-    if (href.startsWith(SITE_ORIGIN)) pathname = href.slice(SITE_ORIGIN.length);
-    else if (href.startsWith("/") && !href.startsWith("//")) pathname = href;
-    else continue;
+    // Resolve against the site and compare origins, so e.g.
+    // https://www.danielnewton.dev.example.net isn't treated as same-site.
+    let url;
+    try {
+      url = new URL(href.replaceAll("&amp;", "&"), SITE_ORIGIN);
+    } catch {
+      continue;
+    }
+    if (url.origin !== SITE_ORIGIN) continue;
+    if (!/^(https?:)?\//.test(href)) continue; // skip "#anchor", "mailto:", relative
+    const pathname = url.pathname;
     checked++;
     if (!(await resolves(pathname))) {
       const pages = broken.get(pathname) ?? new Set();
