@@ -55,7 +55,9 @@ export default defineConfig({
       ],
     }),
     shikiConfig: {
-      themes: { light: "min-light", dark: "night-owl" },
+      // Site change: AstroPaper's min-light/night-owl render comments at 1.76:1
+      // and 3.82:1. These keep every common token at WCAG AA (>= 4.5:1).
+      themes: { light: "github-light-default", dark: "github-dark-default" },
       defaultColor: false,
       wrap: false,
       transformers: [

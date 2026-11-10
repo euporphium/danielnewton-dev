@@ -63,7 +63,10 @@ Keep this list current. It's what to re-check after an upstream merge.
 - `src/pages/index.astro` hero text and meta description are the site's own.
 - `src/i18n/lang/en.ts`: "Posts" labels read "Blog".
 - `src/styles/theme.css` holds the site palette; `public/favicon.svg` is the DN monogram.
-- `astro.config.ts` adds `@astrojs/react` (React islands in MDX, e.g. `Marquee`).
+- `astro.config.ts` adds `@astrojs/react` (React islands in MDX, e.g. `Marquee`) and
+  uses the `github-light-default`/`github-dark-default` Shiki themes (AstroPaper's
+  defaults fail WCAG AA contrast for comments).
+- `src/pages/blog/[...slug]/index.astro`: heading `#` anchor links get an `aria-label`.
 - `src/content.config.ts` adds the `projects` collection.
 - `.prettierrc` disables formatting inside code blocks in content files, so published
   code samples stay exactly as written.
