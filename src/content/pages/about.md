@@ -1,12 +1,12 @@
 ---
 title: "About"
-description: "About Daniel Newton, Software Architect."
+description: "Software Architect at Payscale, full-stack engineer since 2015, and home lab operator. Writing about web development, infrastructure, and tooling."
 ---
 
-Hey there, I'm Daniel! I'm a Software Architect. I have been a full-stack software engineer since 2015 and have experience building scalable web applications and leading development teams. I'm passionate about solving complex problems with clean, maintainable code and have a track record of turning ambitious ideas into successful products.
+Hey there, I'm Daniel. I've been building software professionally since 2015, most of it full-stack web applications, and I've spent the last few years leading teams and then moving into architecture.
 
-Currently, I'm a Team Lead at Payscale where I guide a team of developers while architecting everything from payment integrations to credit systems. My journey has taken me through startups and established companies, working with technologies spanning React and Next.js on the frontend to C# and .NET on the backend, with plenty of cloud infrastructure (Azure, AWS) in between.
+Today I'm a Software Architect at Payscale. The job is mostly about understanding the big picture and making sure engineering teams have the information and guidance they need to be successful. The part I find most rewarding is spotting potential problems early, before they turn into bigger ones, and helping teams make informed decisions that hold up over the long term. In practice that means a mix of proofs of concept, tooling and vendor evaluations, modernizing (and sometimes retiring) legacy services, security work, design and code review, and working out how AI-assisted development fits into a real engineering process. The stack has ranged from React, Next.js, and Angular on the front end to C# and .NET on the back end, with Azure and AWS underneath.
 
-When I'm not coding, you'll find me exploring new technologies, tinkering with side projects, or writing about whatever's caught my interest lately on this blog. I believe the best developers are lifelong learners, so I'm always diving into something new.
+Outside of work I run a home lab, and the honest reason is that I wanted the freedom to run anything I want: my very own internet. It started on the hardware side, turned into a lot of networking (WireGuard, Tailscale, VLANs), and then grew into a Kubernetes cluster: a few Proxmox hosts running k3s, deployed with Argo CD, with Longhorn, Postgres, Authentik, monitoring, and a growing pile of self-hosted services on top. Lately that includes local LLM inference and my own agent tooling. It's taught me more than I expected, and it's the thing that makes me feel like a truly full-stack engineer.
 
-I work remotely and love the flexibility it provides to focus on what matters most: building great software and fostering collaborative teams. If you're interested in connecting or want to chat about technology, leadership, or anything else, feel free to reach out on [LinkedIn](https://www.linkedin.com/in/kennethdnewton/) or [GitHub](https://github.com/euporphium)!
+I work remotely from Mississippi. I write here about whatever I'm figuring out at the time, usually web development, infrastructure, or tooling. If you want to talk about any of it, reach out on [LinkedIn](https://www.linkedin.com/in/kennethdnewton/) or [GitHub](https://github.com/euporphium).
