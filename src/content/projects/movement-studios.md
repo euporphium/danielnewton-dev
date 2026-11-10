@@ -17,6 +17,7 @@ Movement Studios is a fully responsive dance studio website that brings a Figma 
 ### Modern Tech Stack
 
 Built with cutting-edge technologies:
+
 - **Next.js 16** with App Router and React Server Components
 - **React 19.2.0** leveraging the latest features
 - **TypeScript** for robust type safety

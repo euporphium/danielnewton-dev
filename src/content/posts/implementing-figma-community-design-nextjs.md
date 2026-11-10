@@ -79,6 +79,7 @@ Rather than reaching for Tailwind utilities directly everywhere, I created a sma
 ### Semantic color tokens
 
 Instead of scattering raw hex values throughout the UI, the project defines named brand colors:
+
 ```
 brand-main
 brand-soft
@@ -93,6 +94,7 @@ This mirrors how designers think about color tokens in Figma, and it makes the r
 ### Typography system
 
 The design defines a clear hierarchy of text styles, which I translated into utility classes:
+
 ```
 .typo-h1
 .typo-h2
@@ -128,6 +130,7 @@ These are loaded in the root layout so individual components don't have to think
 The project uses the **Next.js App Router**, so React Server Components are the default. Most UI elements are server components, with client components used only where interaction is actually required — the mobile navigation menu being the main example.
 
 The project structure is intentionally minimal:
+
 ```
 src/
   app/

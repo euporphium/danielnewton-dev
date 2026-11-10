@@ -15,9 +15,9 @@ Prettier is an opinionated code formatter that enforces a consistent style acros
 
 **Why is it important?**
 
-*   Reduces the cognitive load for developers.
-*   Eliminates style debates in code reviews.
-*   Ensures a uniform look, especially important in collaborative projects.
+- Reduces the cognitive load for developers.
+- Eliminates style debates in code reviews.
+- Ensures a uniform look, especially important in collaborative projects.
 
 ## Supercharging Prettier for Astro & Tailwind CSS
 
@@ -43,7 +43,7 @@ GitHub repository: [tailwindlabs/prettier-plugin-tailwindcss](https://github.com
 
 Integrating these plugins into your project is straightforward.
 
-###  Installation
+### Installation
 
 First, ensure you have Prettier installed. If you're upgrading from an older version, be aware of any breaking changes, especially when moving to v3.x. Then, install the necessary plugins:
 
@@ -69,8 +69,8 @@ The `plugins` array tells Prettier to load and use these specific plugins when f
 
 Integrating `prettier-plugin-tailwindcss` and `prettier-plugin-astro` significantly streamlines your Astro and Tailwind CSS development workflow. By automating code formatting, you gain:
 
-*   **Clean, readable code:** Consistency across your entire project.
-*   **Reduced cognitive load:** Developers can focus on features, not formatting.
-*   **Improved collaboration:** A uniform codebase simplifies code reviews and onboarding.
+- **Clean, readable code:** Consistency across your entire project.
+- **Reduced cognitive load:** Developers can focus on features, not formatting.
+- **Improved collaboration:** A uniform codebase simplifies code reviews and onboarding.
 
 Don't let manual formatting slow you down. Implement these powerful Prettier plugins in your Astro projects today and experience the benefits of a truly consistent and maintainable codebase!

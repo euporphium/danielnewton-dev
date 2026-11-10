@@ -38,6 +38,7 @@ qm create 9001 --memory 4096 --cores 4 --name ubuntu-25.04 --net0 virtio,bridge=
 ```
 
 This command creates:
+
 - VM ID: 9001
 - Memory: 4GB RAM
 - CPU: 4 cores
@@ -92,6 +93,7 @@ qm set 9001 --serial0 socket --vga serial0
 ## Using Your Template
 
 Once created, you can:
+
 - Clone the template to create new VMs
 - Customize each clone with Cloud-Init settings (SSH keys, user accounts, network configuration)
 - Deploy multiple instances quickly with consistent configurations
@@ -99,6 +101,7 @@ Once created, you can:
 ## Additional Configuration
 
 After cloning from the template, configure Cloud-Init settings in the Proxmox UI:
+
 - Set user credentials
 - Add SSH public keys
 - Configure network settings

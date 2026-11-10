@@ -16,12 +16,12 @@ interface MarqueeTrackProps {
 function MarqueeTrack({ messages, ariaHidden = false }: MarqueeTrackProps) {
   return (
     <div
-      className="marquee flex-none flex items-center"
+      className="marquee flex flex-none items-center"
       aria-hidden={ariaHidden || undefined}
     >
-      <div className="flex-none flex items-center">
-        {messages.map((message) => (
-          <div key={message} className="whitespace-nowrap px-8 text-lg">
+      <div className="flex flex-none items-center">
+        {messages.map(message => (
+          <div key={message} className="px-8 text-lg whitespace-nowrap">
             <p>{message}</p>
           </div>
         ))}
@@ -39,7 +39,7 @@ export default function Marquee({
 }: MarqueeProps) {
   return (
     <div
-      className={`marquee-container overflow-x-hidden flex relative w-full py-4 bg-gray-900 text-white rounded-lg ${className}`}
+      className={`marquee-container relative flex w-full overflow-x-hidden rounded-lg bg-gray-900 py-4 text-white ${className}`}
       style={
         {
           "--marquee-duration": `${duration}s`,

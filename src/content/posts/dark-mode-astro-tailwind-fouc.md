@@ -9,15 +9,15 @@ Adding dark mode to your website significantly enhances the user experience, esp
 
 However, a common pitfall is the "Flash Of Unstyled Content" (FOUC). This happens when your page briefly loads in the default (e.g., light) theme before your JavaScript runs and applies the dark theme, resulting in an unwelcome flicker.
 
-Fortunately, Tailwind CSS itself offers an elegant solution, often implemented in Astro projects, to prevent this FOUC, especially when dealing with global styles and theme settings. Just as you import your global CSS (which includes Tailwind's directives) in a central head component, you can place your dark mode script there too. This ensures your theme is applied *before* the browser even thinks about rendering content.
+Fortunately, Tailwind CSS itself offers an elegant solution, often implemented in Astro projects, to prevent this FOUC, especially when dealing with global styles and theme settings. Just as you import your global CSS (which includes Tailwind's directives) in a central head component, you can place your dark mode script there too. This ensures your theme is applied _before_ the browser even thinks about rendering content.
 
 Let's dive into how to integrate a FOUC-preventing dark mode script into your Astro project's `BaseHead` component, leveraging Tailwind CSS for the styling.
 
 ## The FOUC Problem and the Tailwind Solution
 
-The FOUC issue stems from JavaScript needing time to execute. If your dark mode logic runs *after* the initial rendering of the HTML, the user sees a bright flash before the styles change.
+The FOUC issue stems from JavaScript needing time to execute. If your dark mode logic runs _after_ the initial rendering of the HTML, the user sees a bright flash before the styles change.
 
-Our goal is to apply the initial theme *as early as possible* in the page loading process. By placing our theme-setting JavaScript directly within the `<head>` of your HTML, we ensure it executes almost immediately.
+Our goal is to apply the initial theme _as early as possible_ in the page loading process. By placing our theme-setting JavaScript directly within the `<head>` of your HTML, we ensure it executes almost immediately.
 
 This is where Tailwind CSS shines. Tailwind's `dark:` variant allows you to easily define styles that apply only when the `dark` class is present on a parent element (like `<html>` or `<body>`).
 
@@ -56,16 +56,16 @@ document.documentElement.classList.toggle(
 
 Let's recap what this script does:
 
-*   **`document.documentElement.classList.toggle("dark", condition)`**: This method is the star here. It adds or removes the `"dark"` class on the `<html>` element based on the `condition`'s boolean value.
-*   **`localStorage.theme === "dark"`**: It first checks if the user has an explicit preference for dark mode stored locally. This gives users control.
-*   **`!('theme' in localStorage)`**: If no explicit preference is found in localStorage, it checks this condition first.
-*   **`window.matchMedia("(prefers-color-scheme: dark)").matches`**: Then it gracefully falls back to checking the user's operating system's dark mode preference.
+- **`document.documentElement.classList.toggle("dark", condition)`**: This method is the star here. It adds or removes the `"dark"` class on the `<html>` element based on the `condition`'s boolean value.
+- **`localStorage.theme === "dark"`**: It first checks if the user has an explicit preference for dark mode stored locally. This gives users control.
+- **`!('theme' in localStorage)`**: If no explicit preference is found in localStorage, it checks this condition first.
+- **`window.matchMedia("(prefers-color-scheme: dark)").matches`**: Then it gracefully falls back to checking the user's operating system's dark mode preference.
 
-By putting this script in the `<head>`, we're telling the browser, "Hey, figure out the theme right now, *before* you render anything, so Tailwind knows which styles to apply from the get-go."
+By putting this script in the `<head>`, we're telling the browser, "Hey, figure out the theme right now, _before_ you render anything, so Tailwind knows which styles to apply from the get-go."
 
 ## Integrating into Astro's `BaseHead`
 
-In an Astro project, it's common practice to have a `BaseHead.astro` component (or similar) that consolidates all your `<head>` elements – meta tags, links, font preloads, and crucially, your global CSS imports (which typically pull in Tailwind). This is the *perfect* place for our dark mode script.
+In an Astro project, it's common practice to have a `BaseHead.astro` component (or similar) that consolidates all your `<head>` elements – meta tags, links, font preloads, and crucially, your global CSS imports (which typically pull in Tailwind). This is the _perfect_ place for our dark mode script.
 
 Consider your existing `BaseHead.astro` where you already import your `global.css` for site-wide styling:
 
@@ -101,13 +101,13 @@ By placing this `<script>` tag directly within your `BaseHead.astro` component, 
 
 1.  **The `dark` class is set (or removed) on `<html>` immediately.**
 2.  **Tailwind CSS (loaded via `global.css`) sees this class from the start.**
-3.  **Tailwind's `dark:` variants are applied correctly *before* the page content is painted.**
+3.  **Tailwind's `dark:` variants are applied correctly _before_ the page content is painted.**
 
 Result? A completely flicker-free dark mode experience.
 
 ## What about User Toggles?
 
-This method beautifully handles the *initial* theme application. For users to be able to *switch* themes on demand (e.g., via a button), you'll need additional, client-side JavaScript. This JavaScript would typically:
+This method beautifully handles the _initial_ theme application. For users to be able to _switch_ themes on demand (e.g., via a button), you'll need additional, client-side JavaScript. This JavaScript would typically:
 
 1.  Update the `localStorage.theme` value (`"light"`, `"dark"`, or remove it for OS preference).
 2.  Manually add/remove the `"dark"` class from `document.documentElement` to instantly update the UI.
