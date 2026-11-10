@@ -6,6 +6,9 @@
 //   node scripts/check-urls.mjs                 # check the local build in dist/
 //   node scripts/check-urls.mjs --base <url>    # check a deployment (e.g. a Vercel preview)
 //
+// Vercel previews behind Deployment Protection need the project's "Protection
+// Bypass for Automation" secret in VERCEL_AUTOMATION_BYPASS_SECRET.
+//
 // The baseline lives in scripts/url-baseline.json.
 import { readFile } from "node:fs/promises";
 import path from "node:path";
@@ -24,9 +27,24 @@ if (baseArg !== -1 && !base) {
   process.exit(2);
 }
 
+const bypassSecret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
+const headers = bypassSecret
+  ? { "x-vercel-protection-bypass": bypassSecret }
+  : {};
+
 async function load(pathname) {
   if (base) {
-    const res = await fetch(base + pathname, { redirect: "follow" });
+    const res = await fetch(base + pathname, { headers, redirect: "follow" });
+    // A protected deployment redirects to a login page on another origin.
+    // Stop rather than report every page as wrong.
+    if (new URL(res.url).origin !== new URL(base).origin) {
+      console.error(
+        `${base + pathname} redirected to ${new URL(res.url).origin}: the ` +
+          "deployment is protected. Set VERCEL_AUTOMATION_BYPASS_SECRET, or " +
+          "check a deployment that is publicly reachable."
+      );
+      process.exit(2);
+    }
     return res.ok ? await res.text() : null;
   }
   const file = pathname.endsWith("/")

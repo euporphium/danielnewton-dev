@@ -21,6 +21,7 @@ pnpm build          # astro check + astro build + Pagefind search index
 pnpm preview        # serve dist/
 pnpm check:urls     # verify published URLs, canonicals, RSS GUIDs and dates in dist/
 pnpm check:urls --base https://<deployment>   # same, against a deployment
+# Protected Vercel previews: set VERCEL_AUTOMATION_BYPASS_SECRET first
 pnpm lint
 pnpm format:check   # CI runs lint, format:check and build
 ```
