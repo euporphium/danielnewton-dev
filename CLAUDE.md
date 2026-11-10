@@ -16,15 +16,20 @@ small and deliberate**.
 
 ```bash
 pnpm install
-pnpm dev            # dev server
-pnpm build          # astro check + astro build + Pagefind search index
-pnpm preview        # serve dist/
-pnpm check:urls     # verify published URLs, canonicals, RSS GUIDs and dates in dist/
+pnpm dev             # dev server
+pnpm build           # astro check + astro build + Pagefind search index
+pnpm preview         # serve dist/
+pnpm check:content   # content source rules (markers, placeholder links, dates, tags)
+pnpm check:urls      # published URLs, canonicals, RSS GUIDs and dates in dist/
 pnpm check:urls --base https://<deployment>   # same, against a deployment
 # Protected Vercel previews: set VERCEL_AUTOMATION_BYPASS_SECRET first
+pnpm check:links     # internal links in dist/ resolve
 pnpm lint
-pnpm format:check   # CI runs lint, format:check and build
+pnpm format:check
 ```
+
+CI: `.github/workflows/ci.yml` (AstroPaper's: lint, format, build) and
+`.github/workflows/site-checks.yml` (content, build, URL parity, links).
 
 Node >= 22.23.4.
 
@@ -38,9 +43,10 @@ Node >= 22.23.4.
 | `src/content/projects/` | Projects (site-specific collection) |
 | `src/content/pages/about.md` | About page |
 | `src/content.config.ts` | Collection schemas |
-| `src/components/site/` | Site-specific components (not part of AstroPaper) |
+| `src/components/site/` | Site-specific components: PostHog, cookie consent, project metadata |
 | `src/pages/projects/`, `src/pages/privacy.astro` | Site-specific pages |
-| `scripts/` | Repo checks (`check-urls.mjs` + `url-baseline.json`) |
+| `scripts/` | Repo checks and `url-baseline.json` |
+| `.github/pull_request_template.md` | Article PR checklist (sources, verification log) |
 | `vercel.json` | Vercel install/build/output settings |
 
 ## Deliberate changes to AstroPaper files
@@ -52,19 +58,27 @@ Keep this list current. It's what to re-check after an upstream merge.
   (nav link + active state), `src/components/Breadcrumb.astro` and
   `src/pages/index.astro`. Published URLs must not change.
 - `Header.astro` has a Projects nav link; `Breadcrumb.astro` has a `projects` label.
+- `src/layouts/Layout.astro` mounts PostHog, Speed Insights and the cookie banner.
+- `src/components/Footer.astro` links to `/privacy/`.
+- `src/pages/index.astro` hero text and meta description are the site's own.
+- `src/i18n/lang/en.ts`: "Posts" labels read "Blog".
+- `src/styles/theme.css` holds the site palette; `public/favicon.svg` is the DN monogram.
 - `astro.config.ts` adds `@astrojs/react` (React islands in MDX, e.g. `Marquee`).
 - `src/content.config.ts` adds the `projects` collection.
 - `.prettierrc` disables formatting inside code blocks in content files, so published
   code samples stay exactly as written.
-- AstroPaper's sample posts, FUNDING.yml, issue/PR templates, Docker and commitizen
-  files were removed.
+- Removed: AstroPaper's sample posts and images, `public/default-og.jpg` (pages use the
+  generated `/og.png`), FUNDING.yml, issue/PR templates, Docker and commitizen files.
 
 ## Content conventions
 
 - Required frontmatter: `title`, `description`, `pubDatetime`, `tags`.
-- Write `pubDatetime`/`modDatetime` with an explicit UTC offset, e.g.
+- Write `pubDatetime`/`modDatetime` with a time and explicit offset, e.g.
   `2025-06-08T12:00:00-05:00`. Dates are displayed in `America/Chicago`. A bare
   date or a UTC-midnight time shows as the previous day.
+- Tags are lowercase kebab-case. Reuse existing tags (see `/tags/`) before adding new ones.
+- Set `modDatetime` only for meaningful content updates: it shows "Updated" and moves
+  the post's RSS date. Link or typo fixes don't count.
 - `draft: true` and future dates hide a post in production builds, **including Vercel
   previews**. To preview a new post on a PR, leave `draft` off and use today's date.
   Merging the PR is what publishes it.
@@ -72,6 +86,25 @@ Keep this list current. It's what to re-check after an upstream merge.
   listed in `scripts/url-baseline.json`; add new posts there once they're live.
 - Images: put them next to the post (or in `src/assets/`) and reference them relatively
   so Astro optimizes them.
+
+## Writing and publishing articles
+
+The pull request is the approval gate. Agents may research, draft, verify and open
+PRs; **only Daniel merges an article PR**, and merging publishes it.
+
+1. Branch `post/<slug>`; add `src/content/posts/<slug>.md` (`.mdx` only if it needs a
+   component).
+2. Fill in the PR template: the Sources table, the Verification log, and AI assistance.
+3. Rules for drafted text:
+   - Never write personal experience, opinions, anecdotes or claims about Daniel's
+     work. Leave a marker instead, e.g. `[[DANIEL: what went wrong the first time?]]`.
+     CI fails while any marker remains.
+   - Every non-obvious factual claim needs a source in the PR's Sources table. Never
+     invent or guess a citation or URL. If a source can't be found, say so in the PR.
+   - Run every code sample and command before including it, and record versions and
+     output in the Verification log. Mark anything that couldn't be run.
+   - Match the voice of existing posts: direct, practical, first person, no hype.
+4. CI must pass, and the Vercel preview gets reviewed, before merge.
 
 ## Updating AstroPaper
 
@@ -81,5 +114,6 @@ git merge vX.Y.Z                  # one release at a time; read its release note
 ```
 
 Expect conflicts where upstream changes files listed above, and modify/delete conflicts
-for upstream sample posts (resolve with `git rm`). Then run `pnpm build`,
-`pnpm check:urls`, `pnpm lint` and `pnpm format:check`.
+for upstream sample posts and removed files (resolve with `git rm`). Then run
+`pnpm build`, `pnpm check:content`, `pnpm check:urls`, `pnpm check:links`, `pnpm lint`
+and `pnpm format:check`.
