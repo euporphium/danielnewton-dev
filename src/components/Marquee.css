@@ -1,0 +1,27 @@
+/* Marquee scroll animation, moved from the old global stylesheet. */
+.marquee {
+  animation: marquee-scroll var(--marquee-duration, 25s) linear infinite;
+}
+
+.marquee-container:hover .marquee {
+  animation-play-state: var(--marquee-pause-hover, running);
+}
+
+.marquee-container:active .marquee {
+  animation-play-state: var(--marquee-pause-click, running);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}

@@ -1,3 +1,5 @@
+import "./Marquee.css";
+
 interface MarqueeProps {
   messages: readonly string[];
   duration?: number;
