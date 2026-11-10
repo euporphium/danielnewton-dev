@@ -109,8 +109,8 @@ After cloning from the template, configure Cloud-Init settings in the Proxmox UI
 
 ## References
 
-- [Perfect Proxmox Template with Cloud Image and Cloud Init](https://www.example.com)
-- [Proxmox Cloud Init made easy with Ubuntu 24.04](https://www.example.com)
+- [Perfect Proxmox Template with Cloud Image and Cloud Init](https://technotim.com/posts/cloud-init-cloud-image/) (Techno Tim)
+- [Proxmox Cloud Init made easy with Ubuntu 24.04](https://www.youtube.com/watch?v=3I3C4RfluEg) (Express IT Tech, YouTube)
 
 ---
 
