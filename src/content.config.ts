@@ -39,4 +39,21 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { posts, pages };
+// Site-specific (not part of AstroPaper): portfolio projects at /projects/.
+const projects = defineCollection({
+  loader: glob({
+    pattern: "**/[^_]*.{md,mdx}",
+    base: "./src/content/projects",
+  }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    tags: z.array(z.string()),
+    liveUrl: z.url().optional(),
+    repoUrl: z.url().optional(),
+    featured: z.boolean().default(false),
+  }),
+});
+
+export const collections = { posts, pages, projects };
