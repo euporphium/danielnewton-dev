@@ -22,7 +22,8 @@ function MarqueeTrack({ messages, ariaHidden = false }: MarqueeTrackProps) {
       <div className="flex flex-none items-center">
         {messages.map(message => (
           <div key={message} className="px-8 text-lg whitespace-nowrap">
-            <p>{message}</p>
+            {/* text-white: post prose styles would otherwise recolour this on the dark track */}
+            <p className="text-white">{message}</p>
           </div>
         ))}
       </div>
