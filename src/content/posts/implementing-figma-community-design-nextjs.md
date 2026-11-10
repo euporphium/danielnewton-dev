@@ -1,7 +1,8 @@
 ---
 title: "Implementing a Figma Community Design with Next.js"
 description: "Using a Figma community design to practice translating a design system into production UI."
-pubDate: 2026-03-08
+pubDatetime: 2026-03-08T12:00:00-05:00
+tags: [nextjs, design-systems]
 ---
 
 Most of the applications I build are full-stack systems. They usually start with a rough idea and evolve through iteration. Features get added, requirements shift, and the UI grows organically as the product develops.

@@ -1,7 +1,8 @@
 ---
 title: 'Creating an Ubuntu 25.04 Cloud Template in Proxmox'
 description: 'A comprehensive guide to creating an Ubuntu 25.04 cloud-init template in Proxmox VE for streamlined VM deployment and infrastructure automation.'
-pubDate: 'Jun 8, 2025'
+pubDatetime: 2025-06-08T12:00:00-05:00
+tags: [proxmox, homelab]
 ---
 
 Setting up cloud-init templates in Proxmox can significantly streamline your VM deployment process. Here's a step-by-step guide to create an Ubuntu 25.04 cloud template that you can clone and customize quickly.
