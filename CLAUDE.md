@@ -46,6 +46,7 @@ Node >= 22.23.4.
 | `src/components/site/` | Site-specific components: PostHog, cookie consent, project metadata |
 | `src/pages/projects/`, `src/pages/privacy.astro` | Site-specific pages |
 | `scripts/` | Repo checks and `url-baseline.json` |
+| `examples/` | Standalone, runnable packages that posts link to. Not part of the site build; each has its own pinned dependencies |
 | `.github/pull_request_template.md` | Article PR checklist (sources, verification log) |
 | `vercel.json` | Vercel install/build/output settings |
 
@@ -68,6 +69,8 @@ Keep this list current. It's what to re-check after an upstream merge.
   defaults fail WCAG AA contrast for comments).
 - `src/pages/blog/[...slug]/index.astro`: heading `#` anchor links get an `aria-label`.
 - `src/content.config.ts` adds the `projects` collection.
+- `tsconfig.json` excludes `examples/`, whose packages have their own dependencies
+  and are not installed here.
 - `.prettierrc` disables formatting inside code blocks in content files, so published
   code samples stay exactly as written.
 - Removed: AstroPaper's sample posts and images, `public/default-og.jpg` (pages use the

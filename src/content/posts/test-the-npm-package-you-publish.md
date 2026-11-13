@@ -5,15 +5,13 @@ pubDatetime: 2026-11-12T01:00:00-06:00
 tags: [tooling, npm, testing]
 ---
 
-In August, a version of my React component library, [`@i258/ui`](https://www.npmjs.com/package/@i258/ui), went to npm in a state where it could not be imported. Version 0.5.1 had a `package.json` whose `exports` pointed at `./dist/index.js` and a tarball that contained `dist/index.mjs` instead. The type check, the Storybook build, and the component and screenshot tests that run on it had all passed.
+In August, a version of my React component library, [`@i258/ui`](https://www.npmjs.com/package/@i258/ui), went to npm in a state where it could not be imported. Version 0.5.1 had a `package.json` whose `exports` pointed at `./dist/index.js` and a tarball that contained `dist/index.mjs` instead. The release had passed CI and the publish workflow.
 
-[[DANIEL: You hit this in CI, in the Docker image build of the apps that consume the library, at the `pnpm build` step. Say what you saw and how you traced it back to the library, in two or three sentences.]]
-
-A fixed version, 0.5.2, was on npm a little under four hours later. This post covers what changed, why none of the existing checks could see it, and the two checks that do.
+The apps that depend on the library could not build against it. The [pull request that fixed it](https://github.com/i258-net/ui/pull/47) records their bundlers failing with `Can't resolve '@i258/ui'`. A fixed version, 0.5.2, was on npm a little under four hours after the broken one. This post covers what changed, why none of the existing checks could see it, and the two checks that do.
 
 ## What changed
 
-A [grouped Dependabot pull request](https://github.com/i258-net/ui/pull/31) moved [tsdown](https://tsdown.dev/), the bundler the library is built with, from 0.14.2 to 0.22.14. Every check on that pull request was green.
+A [grouped Dependabot pull request](https://github.com/i258-net/ui/pull/31) moved [tsdown](https://tsdown.dev/), the bundler the library is built with, from 0.14.2 to 0.22.14. Its CI job passed: type check, build, tests, Storybook build and screenshot tests. Two days later, the commit that became 0.5.1 passed the same job and then the publish workflow.
 
 Between those two versions, tsdown 0.16.0 changed a default. The [release notes](https://github.com/rolldown/tsdown/releases/tag/v0.16.0) list it under breaking changes:
 
@@ -23,7 +21,7 @@ Between those two versions, tsdown 0.16.0 changed a default. The [release notes]
 >
 > This modification may affect the `main`, `module`, `types`, `exports`, and `bin` fields in `package.json`.
 
-`platform` defaults to `node`, so this applies to any config that sets neither option. Before 0.16.0, a package with `"type": "module"` got `.js` files. From 0.16.0 on, it gets `.mjs`.
+`platform` defaults to `node`, so this applies to any config that sets neither option. For an ESM build like this one, in a package with `"type": "module"`, tsdown wrote `.js` files before 0.16.0. From 0.16.0 on, it writes `.mjs`.
 
 That release came out in November 2025, almost ten months before the upgrade. The Dependabot pull request did quote tsdown's release notes, but only the most recent ones before the text was cut off, and nothing in it mentions `fixedExtension`. The upgrade crossed eight minor versions in one step, and the one note that mattered was not in the pull request.
 
@@ -31,7 +29,7 @@ Other people ran into it much sooner. The day after 0.16.0 was released, [a comm
 
 ## Reproducing it
 
-Here is the smallest package that shows the problem. `package.json`:
+Here is a small package that shows the problem. The [complete package](https://github.com/euporphium/danielnewton-dev/tree/main/examples/tsdown-fixed-extension), with pinned dependency versions, is in this site's repository. I ran it on Node 26.12.1. Its `package.json`, without the dependencies:
 
 ```json
 {
@@ -61,7 +59,7 @@ export default defineConfig({
 });
 ```
 
-`src/index.ts` exports one function, and `src/index.test.ts` imports it from `./index.ts` and asserts on the result.
+`src/index.ts` exports one function, and `src/index.test.ts` imports it from `./index.ts` and asserts on the result. Those two files and the `tsconfig.json` are in the linked package.
 
 With tsdown 0.15.12, the build writes `dist/index.js`. With tsdown 0.23.7, the current release, the same files produce this (output trimmed):
 
@@ -123,18 +121,26 @@ It reports 14 errors in all, one for each JavaScript entry point.
 
 publint is static. It tells you the file is there. It does not load it. The second check does: pack the package, install the tarball somewhere with no access to your source tree, and import it.
 
+Saved as `verify-pack.sh` in the package:
+
 ```bash
+#!/usr/bin/env bash
 set -e
+
 npm run build
 npx publint
+
 TARBALL="$PWD/$(npm pack | tail -n 1)"
-cd "$(mktemp -d)"
+CONSUMER="$(mktemp -d)"
+trap 'rm -rf "$CONSUMER" "$TARBALL"' EXIT
+
+cd "$CONSUMER"
 npm init -y > /dev/null
 npm install "$TARBALL"
 node -e "import('demo-lib').then(m => console.log(Object.keys(m)))"
 ```
 
-Run in the demo package with the default config, this stops at publint with the "file does not exist" error. With the fix below, it finishes by printing `[ 'greet' ]`.
+Run it with `bash verify-pack.sh`. In the demo package with the default config, it stops at publint with the "file does not exist" error. With the fix below, it finishes by printing `[ 'greet' ]`.
 
 The library's own version of this is a script, [`pack-verify.mjs`](https://github.com/i258-net/ui/blob/main/packages/ui/scripts/pack-verify.mjs), that CI runs after the build. A coding agent wrote it along with the fix. It checks every export target against the tarball's file list, which is the part publint also covers, and then imports the package root from a clean install.
 
@@ -162,6 +168,8 @@ The second is to stop writing `exports` by hand. With `exports: true`, tsdown [g
 +    "./package.json": "./package.json"
 ```
 
+Review the generated export map before publishing, especially custom subpaths and assets. tsdown writes the field from its own output. In the demo package, a hand-written `types` condition and a `./styles.css` subpath were both replaced by the two entries above on the next build. `@i258/ui` has both kinds of entry.
+
 tsdown can also run publint for you. With `publint: true` in the config and publint installed, the build itself fails:
 
 ```
@@ -170,6 +178,6 @@ ERROR  [publint] pkg.exports["."] is ./dist/index.js but the file does not exist
 
 ## What I took from it
 
-The test suites need to run against the production artifact, not just the development one. Every check the library had was testing source files, and consumers never receive those. They receive a tarball, and the way to know the tarball works is to build it, install it and import it before publishing.
+The test suites need to run against the production artifact, not just the development one. Every check the library had was testing source files, and consumers never receive those. They receive a tarball.
 
-[[DANIEL: Anything to add or change in this closing? The first sentence is your interview answer, lightly tidied. Delete this marker if it stands.]]
+Building, installing and importing the packed package is the smallest version of that principle, and it would have caught this failure before publication. It is a first check, not the whole job. It says nothing about whether the components behave correctly once imported, whether the type declarations are right, or whether the stylesheet and every subpath resolve. Those need their own tests against the same tarball.
