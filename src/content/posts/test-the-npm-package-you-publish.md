@@ -7,7 +7,9 @@ tags: [tooling, npm, testing]
 
 In August, a version of my React component library, [`@i258/ui`](https://www.npmjs.com/package/@i258/ui), went to npm in a state where it could not be imported. Version 0.5.1 had a `package.json` whose `exports` pointed at `./dist/index.js` and a tarball that contained `dist/index.mjs` instead. The release had passed CI and the publish workflow.
 
-The apps that depend on the library could not build against it. The [pull request that fixed it](https://github.com/i258-net/ui/pull/47) records their bundlers failing with `Can't resolve '@i258/ui'`. A fixed version, 0.5.2, was on npm a little under four hours after the broken one. This post covers what changed, why none of the existing checks could see it, and the two checks that do.
+The problem surfaced when the apps that depend on the library failed to build, with their bundlers reporting `Can't resolve '@i258/ui'`. An AI coding agent investigated the failure, identified the mismatch and [implemented the fix](https://github.com/i258-net/ui/pull/47). The corrected release, 0.5.2, was on npm a little under four hours after the broken one.
+
+I later went back over the failure to understand why CI had not caught it and which checks would. This post is the result: what changed, why none of the existing checks could see it, and the two checks that do.
 
 ## What changed
 
@@ -142,7 +144,7 @@ node -e "import('demo-lib').then(m => console.log(Object.keys(m)))"
 
 Run it with `bash verify-pack.sh`. In the demo package with the default config, it stops at publint with the "file does not exist" error. With the fix below, it finishes by printing `[ 'greet' ]`.
 
-The library's own version of this is a script, [`pack-verify.mjs`](https://github.com/i258-net/ui/blob/main/packages/ui/scripts/pack-verify.mjs), that CI runs after the build. A coding agent wrote it along with the fix. It checks every export target against the tarball's file list, which is the part publint also covers, and then imports the package root from a clean install.
+The library's own version of this is a script, [`pack-verify.mjs`](https://github.com/i258-net/ui/blob/main/packages/ui/scripts/pack-verify.mjs), which the agent added as part of the fix and CI now runs after the build. It checks every export target against the tarball's file list, which is the part publint also covers, and then imports the package root from a clean install.
 
 That import has a limit worth knowing. It proves the root entry point loads. It does not prove each subpath does. For those, the script only checks that the files exist. Checking that a file is present and checking that it loads are different tests, and a package with many entry points needs an import for each one to get the second.
 
