@@ -25,48 +25,109 @@ import config from "@/config";
 
     <h2>Data Collection</h2>
     <p>
-      I do not collect personal data directly, but I use the following services
-      that may collect data:
+      I use the following service providers to process information when you
+      visit this website or contact me.
     </p>
     <ul>
-      <li>PostHog: for web analytics, session replay, and error tracking</li>
-      <li>Vercel: for hosting</li>
-      <li>Proton: for email communication</li>
+      <li>
+        <strong>PostHog</strong>: website analytics and error tracking. PostHog
+        only starts after you choose Accept on the banner. It then records which
+        pages you view, how you interact with them (such as clicks), and
+        information about your browser and device. If a script on the page
+        fails, it also records the error message, where in the code it happened
+        and the page you were on. Session recording, heatmaps, performance
+        measurement and surveys are switched off in the site's code. Your IP
+        address is visible to Cloudflare (see below) as it handles the
+        connection. PostHog uses it to estimate your approximate location and
+        then discards it, so it isn't stored with the analytics data. The data
+        goes to PostHog's US servers.
+      </li>
+      <li>
+        <strong>Vercel</strong>: hosting, and website performance measurement
+        with Vercel Speed Insights. As my host, Vercel receives each request to
+        the site, including your IP address, the page requested and browser
+        details. Speed Insights reports page load performance together with the
+        page address, browser, device type and operating system, network speed
+        and country. Vercel describes this data as anonymous and says it can't
+        be used to follow a visit across pages. Hosting and Speed Insights run
+        whatever you choose on the banner.
+      </li>
+      <li>
+        <strong>Proton</strong>: email. If you email me, Proton processes the
+        message so that I can read and reply to it.
+      </li>
     </ul>
     <p>
-      These services may collect different types of data according to their own
-      privacy policies:
-      <a href="https://posthog.com/privacy">PostHog</a>,
-      <a href="https://vercel.com/legal/privacy-policy">Vercel</a>,
-      <a href="https://proton.me/legal/privacy">Proton</a>.
+      PostHog analytics goes through PostHog's managed proxy on my own domain.
+      Cloudflare processes that traffic on PostHog's behalf to provide the
+      proxy.
+    </p>
+    <p>
+      Each provider handles data under its own terms: <a
+        href="https://posthog.com/privacy">PostHog privacy policy</a
+      >
+      (see also PostHog's <a href="https://posthog.com/dpa"
+        >data processing agreement</a
+      >, <a href="https://posthog.com/subprocessors">subprocessor list</a> and
+      <a href="https://posthog.com/docs/advanced/proxy"
+        >managed proxy documentation</a
+      >),
+      <a href="https://vercel.com/legal/privacy-policy">Vercel privacy policy</a
+      >
+      and
+      <a href="https://vercel.com/docs/speed-insights/privacy-policy"
+        >Speed Insights privacy information</a
+      >, and
+      <a href="https://proton.me/legal/privacy">Proton privacy policy</a>.
     </p>
 
     <h2>Legal Basis for Processing</h2>
-    <p>I process data based on:</p>
     <ul>
       <li>
-        Consent: Through my cookie banner, you can explicitly consent to the use
-        of analytical and tracking cookies.
+        Consent: I use PostHog only if you accept it on the analytics banner.
+        You can withdraw consent at any time (see Your Rights below).
+        Withdrawing doesn't affect processing that happened before you withdrew.
       </li>
       <li>
-        Legitimate Interest: For understanding my audience and improving my
-        services.
+        Legitimate interest: delivering the website and keeping it working and
+        fast (Vercel hosting and Speed Insights), and reading and replying to
+        emails you send me (Proton).
       </li>
     </ul>
 
     <h2>Data Transfer</h2>
     <p>
-      Some data is processed outside the European Economic Area (EEA), for
-      example by PostHog. This transfer is protected by appropriate safeguards,
-      including Standard Contractual Clauses (SCC).
+      Some of this processing happens outside the European Economic Area (EEA).
+      PostHog data goes to PostHog's US servers, and Vercel and Proton may also
+      process data outside the EEA.
+    </p>
+    <p>
+      Because analytics traffic passes through Cloudflare, Cloudflare may
+      process it in data centers in several countries, including outside the
+      EEA, before it reaches PostHog. PostHog doesn't guarantee that this
+      traffic stays in the EU, even for its EU region.
+    </p>
+    <p>
+      Transfers are covered by the mechanisms the providers document. Vercel's <a
+        href="https://vercel.com/legal/dpa">data processing addendum</a
+      > describes the EU Standard Contractual Clauses, and its privacy policy says
+      it complies with the EU-U.S. Data Privacy Framework. PostHog publishes a
+      <a href="https://posthog.com/dpa">data processing agreement</a> and a
+      <a href="https://posthog.com/subprocessors">subprocessor list</a>.
     </p>
 
     <h2>Retention Period</h2>
     <p>
-      I retain data only as long as necessary for the purposes outlined in this
-      policy. Third-party services retain data according to their own retention
-      policies. You can request deletion of your data at any time by contacting
-      me.
+      PostHog keeps analytics data for 12 months. It deletes older data in a
+      monthly cleanup, so some of it can last up to about a month longer. I may
+      delete it sooner, for example because you ask me to. Vercel and Proton
+      keep data according to their own policies. Your Accept or Reject choice
+      stays in your browser until you change it or clear your site data.
+    </p>
+    <p>
+      To have your PostHog data deleted, contact me. It is linked to a random
+      identifier stored in your browser rather than your name, so I may need
+      that identifier to find it.
     </p>
 
     <h2>Security</h2>
@@ -76,7 +137,6 @@ import config from "@/config";
     </p>
     <ul>
       <li>Data encryption via HTTPS/TLS</li>
-      <li>IP anonymization where applicable</li>
       <li>Limited access controls</li>
       <li>Regular security updates</li>
     </ul>
@@ -88,7 +148,11 @@ import config from "@/config";
     </p>
 
     <h2>Your Rights</h2>
-    <p>Under the GDPR, you have the following rights:</p>
+    <p>
+      If the GDPR or a similar law applies to you, you may have the following
+      rights. Which ones apply depends on where you live and on the legal basis
+      for the processing.
+    </p>
     <ul>
       <li>Right to information about the processing of your data</li>
       <li>Right to access your data</li>
@@ -98,23 +162,60 @@ import config from "@/config";
       <li>Right to data portability</li>
       <li>Right to object to processing</li>
       <li>Right not to be subject to automated decision-making</li>
-    </ul>
-
-    <h2>Cookies</h2>
-    <p>I use cookies for:</p>
-    <ul>
-      <li>Analytical purposes (PostHog)</li>
-      <li>Session Recording and error tracking (PostHog)</li>
+      <li>Right to complain to your local data protection authority</li>
     </ul>
     <p>
-      You can manage your cookie preferences through my cookie banner or your
-      browser settings.
+      To withdraw your consent, choose "Privacy settings" in the footer of any
+      page and then Reject. PostHog stops collecting new data from your browser
+      and the site removes the PostHog entries it stored there. Withdrawing
+      doesn't delete data PostHog already collected. To have that deleted,
+      contact me.
+    </p>
+
+    <h2>Cookies and local storage</h2>
+    <p>
+      The site stores the following in your browser. "Privacy settings" in the
+      footer lets you change your choice at any time.
+    </p>
+    <ul>
+      <li>
+        <strong>Your analytics choice</strong> (local storage, key <code
+          >analytics_consent</code
+        >): remembers whether you accepted or rejected PostHog, on this browser
+        only. It holds no identifier. It is set when you choose Accept or Reject
+        and is kept until you change it or clear your site data. Deleting
+        cookies alone doesn't remove it, because it isn't a cookie. Clearing
+        local storage does, and then I will ask you again.
+      </li>
+      <li>
+        <strong>PostHog</strong> (cookie and local storage, names starting with <code
+          >ph_</code
+        >): only after you accept. Holds a random identifier for your browser
+        and information PostHog uses to group your page views into a visit. If
+        you reject or withdraw, or have not accepted, the site removes any such
+        entries it finds. If your browser blocks local storage, I can't remember
+        a choice, so PostHog stays off.
+      </li>
+      <li>
+        <strong>Theme</strong> (local storage, key <code>theme</code>): set only
+        if you use the light/dark toggle, to remember your selection.
+      </li>
+    </ul>
+    <p>
+      Vercel hosting and Speed Insights aren't controlled by your analytics
+      choice. The Speed Insights script currently stores nothing in your
+      browser.
+    </p>
+    <p>
+      Earlier versions of the banner didn't name PostHog or say what it records.
+      If you accepted then, I don't treat that as consent and you will be asked
+      again. If you rejected then, that choice still applies.
     </p>
 
     <h2>Changes to this Privacy Policy</h2>
     <p>
-      This Privacy Policy is effective as of <time datetime="2025-06-07"
-        >Jun 7, 2025</time
+      This Privacy Policy is effective as of <time datetime="2026-11-15"
+        >Nov 15, 2026</time
       > and will remain in effect except with respect to any changes in its provisions
       in the future, which will be in effect immediately after being posted on this
       page.

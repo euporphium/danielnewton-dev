@@ -35,6 +35,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Test consent logic
+        run: pnpm run test
+
       - name: Check content source
         run: pnpm run check:content
 
