@@ -26,7 +26,15 @@ pnpm check:urls --base https://<deployment>   # same, against a deployment
 pnpm check:links     # internal links in dist/ resolve
 pnpm lint
 pnpm format:check
+pnpm test            # unit tests for analytics consent, loader and proxy config
 ```
+
+**Analytics changes must keep `src/pages/privacy.astro` true.** PostHog is opt-in: no
+load or request before Accept, and the policy describes exactly what the init config
+in `posthog-loader.ts` enables. Flags and remote config are disabled, so the PostHog
+dashboard can't switch features on; error capture is on in code, and session replay,
+heatmaps, dead clicks, web vitals, surveys and product tours are off in code. Never paste PostHog's
+HTML snippet into a page: it ends with an unconditional `posthog.init`.
 
 CI: `.github/workflows/ci.yml` (AstroPaper's: lint, format, build) and
 `.github/workflows/site-checks.yml` (content, build, URL parity, links).
@@ -44,6 +52,7 @@ Node >= 22.23.4.
 | `src/content/pages/about.md` | About page |
 | `src/content.config.ts` | Collection schemas |
 | `src/components/site/` | Site-specific components: PostHog, cookie consent, project metadata |
+| `src/scripts/` (`analytics*.ts`, `consent.ts`, `posthog-loader.ts`) | Opt-in PostHog: consent rules, the flow, and the loader/config for PostHog's managed proxy on `e.danielnewton.dev` (unit tested by `pnpm test`). `PUBLIC_PH_PROJECT_API_KEY` supplies the token; `PUBLIC_PH_API_HOST` optionally overrides the host for local tests |
 | `src/pages/projects/`, `src/pages/privacy.astro` | Site-specific pages |
 | `scripts/` | Repo checks and `url-baseline.json` |
 | `examples/` | Standalone, runnable packages that posts link to. Not part of the site build; each has its own pinned dependencies |
@@ -60,7 +69,8 @@ Keep this list current. It's what to re-check after an upstream merge.
   `src/pages/index.astro`. Published URLs must not change.
 - `Header.astro` has a Projects nav link; `Breadcrumb.astro` has a `projects` label.
 - `src/layouts/Layout.astro` mounts PostHog, Speed Insights and the cookie banner.
-- `src/components/Footer.astro` links to `/privacy/`.
+- `src/components/Footer.astro` links to `/privacy/` and has a "Privacy settings"
+  button (`data-privacy-settings`) that reopens the consent banner.
 - `src/pages/index.astro` hero text and meta description are the site's own.
 - `src/i18n/lang/en.ts`: "Posts" labels read "Blog".
 - `src/styles/theme.css` holds the site palette; `public/favicon.svg` is the DN monogram.

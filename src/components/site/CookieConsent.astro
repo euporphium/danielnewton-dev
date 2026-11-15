@@ -1,60 +1,173 @@
 ---
-// Site-specific (not part of AstroPaper): consent banner for PostHog storage.
+// Site-specific (not part of AstroPaper): analytics consent banner.
 //
-// `transition:persist` keeps the same banner element across ClientRouter
-// navigations, so an unanswered banner stays visible (and its listeners stay
-// attached) until the visitor chooses. The choice is stored in localStorage
-// and read by PostHog.astro.
+// `transition:persist` (with an explicit name; Astro's generated ids differ per
+// page and do not match) keeps the same banner element across ClientRouter
+// navigations, so an unanswered banner stays visible until the visitor
+// chooses. The footer's "Privacy settings" button (`data-privacy-settings`)
+// reopens it so the choice can be changed or withdrawn.
 ---
 
 <section
   id="cookie-consent-banner"
-  aria-label="Cookie consent"
-  transition:persist
+  aria-label="Analytics consent"
+  tabindex="-1"
+  transition:persist="cookie-consent-banner"
   hidden
-  class="border-border bg-background text-foreground fixed inset-x-2 bottom-2 z-50 flex flex-col items-center justify-between gap-3 rounded border px-4 py-4 shadow-lg sm:flex-row"
+  class="ph-no-capture border-border bg-background text-foreground fixed inset-x-2 bottom-2 z-50 flex flex-col items-center justify-between gap-3 rounded border px-4 py-4 shadow-lg sm:flex-row"
 >
-  <p>
-    This website uses data collection to enhance the browsing experience. Read
-    my{" "}
-    <a
-      href="/privacy/"
-      class="hover:text-accent underline decoration-dashed underline-offset-4"
-      >privacy policy</a
-    >{" "}
-    for more information.
-  </p>
-  <div class="flex shrink-0 gap-2">
+  <div class="space-y-2">
+    <p>
+      May I use PostHog analytics? It records page views, clicks, page errors,
+      and browser and device details, and stores a random ID in cookies and
+      local storage. It runs only if you accept. Change your choice any time
+      under "Privacy settings" in the footer. Details are in my{" "}
+      <a
+        href="/privacy/"
+        class="hover:text-accent underline decoration-dashed underline-offset-4"
+        >privacy policy</a
+      >.
+    </p>
+    <p id="cookie-consent-status" role="status" class="text-sm"></p>
+  </div>
+  <div class="flex shrink-0 flex-wrap gap-2">
     <button
       type="button"
-      data-consent="yes"
-      class="bg-accent text-accent-foreground rounded px-4 py-2 font-medium"
+      data-consent="granted"
+      class="border-foreground hover:bg-accent hover:text-accent-foreground rounded border px-4 py-2 font-medium"
     >
       Accept
     </button>
     <button
       type="button"
-      data-consent="no"
-      class="border-foreground rounded border px-4 py-2 font-medium"
+      data-consent="denied"
+      class="border-foreground hover:bg-accent hover:text-accent-foreground rounded border px-4 py-2 font-medium"
     >
       Reject
+    </button>
+    <button
+      type="button"
+      data-consent-close
+      hidden
+      class="border-border rounded border px-4 py-2"
+    >
+      Close
     </button>
   </div>
 </section>
 
 <script>
-  const banner = document.getElementById("cookie-consent-banner");
+  import {
+    CONSENT_CHANGE_EVENT,
+    getConsent,
+    setConsent,
+  } from "@/scripts/analytics";
 
-  if (banner && !localStorage.getItem("cookie_consent")) {
-    banner.hidden = false;
+  // Elements are looked up on every use and events are delegated from the
+  // document, so nothing depends on holding a reference to a node that
+  // ClientRouter might replace.
+  const banner = () => document.getElementById("cookie-consent-banner");
+  const closeButton = () =>
+    banner()?.querySelector<HTMLButtonElement>("button[data-consent-close]");
+  const isReopened = () => closeButton()?.hidden === false;
+
+  let returnFocusTo: HTMLElement | null = null;
+
+  function showStatus(message: string) {
+    const status = document.getElementById("cookie-consent-status");
+    if (status) status.textContent = message;
   }
 
-  banner?.addEventListener("click", event => {
-    const button = (event.target as HTMLElement).closest<HTMLButtonElement>(
-      "button[data-consent]"
-    );
+  function currentChoiceMessage() {
+    return getConsent() === "granted"
+      ? "PostHog analytics is currently on. Reject to turn it off."
+      : "PostHog analytics is currently off.";
+  }
+
+  function open(fromUser: boolean) {
+    const el = banner();
+    if (!el) return;
+    el.hidden = false;
+    if (fromUser) {
+      const close = closeButton();
+      if (close) close.hidden = false;
+      showStatus(currentChoiceMessage());
+      el.focus();
+    }
+  }
+
+  function close() {
+    const el = banner();
+    if (!el) return;
+    el.hidden = true;
+    const button = closeButton();
+    if (button) button.hidden = true;
+    showStatus("");
+    if (returnFocusTo?.isConnected) returnFocusTo.focus();
+    returnFocusTo = null;
+  }
+
+  // An unanswered banner must be visible on every page.
+  function showIfUnanswered() {
+    if (getConsent() === "unset") open(false);
+  }
+
+  showIfUnanswered();
+  document.addEventListener("astro:after-swap", showIfUnanswered);
+
+  document.addEventListener("click", event => {
+    const target = event.target as HTMLElement;
+
+    const trigger = target.closest<HTMLElement>("[data-privacy-settings]");
+    if (trigger) {
+      returnFocusTo = trigger;
+      open(true);
+      return;
+    }
+
+    if (!target.closest("#cookie-consent-banner")) return;
+
+    if (target.closest("button[data-consent-close]")) {
+      close();
+      return;
+    }
+
+    const button = target.closest<HTMLButtonElement>("button[data-consent]");
     if (!button) return;
-    window.handleCookieConsent?.(button.dataset.consent as "yes" | "no");
-    banner.hidden = true;
+
+    const remembered = setConsent(
+      button.dataset.consent as "granted" | "denied"
+    );
+    if (remembered) {
+      close();
+    } else {
+      // Nothing was stored, so PostHog stays off and the choice can't persist.
+      open(true);
+      showStatus(
+        "Your browser blocked local storage, so I can't remember your choice. PostHog stays off."
+      );
+    }
+  });
+
+  document.addEventListener("keydown", event => {
+    const el = banner();
+    if (
+      event.key === "Escape" &&
+      el &&
+      !el.hidden &&
+      isReopened() &&
+      getConsent() !== "unset"
+    ) {
+      close();
+    }
+  });
+
+  // Choice changed elsewhere (another tab, back/forward cache).
+  document.addEventListener(CONSENT_CHANGE_EVENT, () => {
+    const el = banner();
+    if (!el) return;
+    if (getConsent() === "unset") open(false);
+    else if (!isReopened()) el.hidden = true;
+    else showStatus(currentChoiceMessage());
   });
 </script>

@@ -16,7 +16,8 @@
     "lint": "eslint .",
     "check:urls": "node scripts/check-urls.mjs",
     "check:content": "node scripts/check-content.mjs",
-    "check:links": "node scripts/check-links.mjs"
+    "check:links": "node scripts/check-links.mjs",
+    "test": "node --test scripts/*.test.mjs"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.8",
