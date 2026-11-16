@@ -21,7 +21,7 @@ The list is useful beyond that. She can re-rank it whenever she wants, so a coup
 
 The first version of this was a rudimentary sharing add-on to another app I was already self-hosting. What she liked was simple: her list was on her phone and on mine.
 
-Then my computer crashed. My homelab was not set up the way it is now, so we moved to [Craft](https://www.craft.do/), a notes app with checklists. That worked, but I wanted to get back to something I had written myself and that was built for this one purpose.
+Then the old laptop where I was hosting that app crashed. I did not have the home server setup I have now, so we moved to [Craft](https://www.craft.do/), a notes app with checklists. That worked, but I wanted to get back to something I had written myself and that was built for this one purpose.
 
 That meant asking her to move a third time, and it became my most important consideration while building. It had to be something I could sell her on as worth having. In practice that meant three things:
 
@@ -49,7 +49,9 @@ The second decision went the other way. A week later, while designing how lists 
 
 ## How it landed
 
-I had to sneak it onto her phone, and then convince her to open it. Once she did, she liked it, and right away she preferred it to both of the tools she had used before. Her list was there and she was already signed in.
+I wanted everything ready before she ever saw it. I planted her password in our shared password manager so it was ready to go. Then I snuck onto her phone and logged into the app, so it was all set up.
+
+After that I had to convince her to open it. Once she did, she liked it, and right away she preferred it to both of the tools she had used before. Her list was there and she was already signed in.
 
 ## Try it
 

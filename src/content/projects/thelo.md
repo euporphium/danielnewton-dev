@@ -11,6 +11,8 @@ featured: true
 
 Thelo is the wishlist app my partner and I use. The name is Greek for "I want". Each of us keeps a list, ranks it, and can see the other's, so the list is on both phones and is there whenever one of us wants to buy the other a gift.
 
+It started with gifts and has since grown to any kind of list. We now keep shared ones too, for things like home improvements, so there is yours, mine and ours, and a place to look when we are planning our next big purchase for the home.
+
 It is the third tool we have used for this, and the first one built for the purpose. I wrote about why it exists and how it was built in [Building Thelo: a shared wishlist, for the third time](/blog/building-thelo-shared-wishlist/).
 
 ## Try it
