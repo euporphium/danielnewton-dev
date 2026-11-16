@@ -65,7 +65,9 @@ After that I had to convince her to open it. Once she did, she liked it, and rig
 
 ## Try it
 
-Thelo has no sign-up page. I create accounts by hand, and I do not expect it to have many users. But I wanted it to be something you can try, so the following weekend I added a demo, along with sharing a list by invite and read-only public links.
+Thelo has no sign-up page. I create accounts by hand, and I do not expect it to have many users. But I wanted it to be something you can try.
+
+The following weekend's work was bigger and I planned it differently: three larger pieces (shared lists, a guest demo and read-only public links), each broken into stories, with three releases to production that each waited on my approval.
 
 On the [sign-in page](https://thelo.i258.net/login), "Try the demo" creates a temporary guest account with fictional lists: your own, a fictional partner's, and one you share. Photo uploads, sharing and title lookup are switched off for guests. The demo ends after 24 hours and its data is then deleted.
 
