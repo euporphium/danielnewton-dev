@@ -9,7 +9,7 @@ tags: [ai-agents, pwa, homelab]
 
 I built the first version in about a day and a half, and most of the code was written by AI coding agents that I directed. The first pull request opened on a Saturday morning. The release that carried the redesign was merged for production about 25 hours later, 24 pull requests in.
 
-The last project I wrote about here was [an exercise in implementing someone else's design](/blog/implementing-figma-community-design-nextjs/). This one is different: it is an app we use, and one I keep maintaining. This post covers why it exists, how that weekend worked, and two decisions that show where the agents helped and where I had to step in.
+The last project I wrote about here was [an exercise in implementing someone else's design](/blog/implementing-figma-community-design-nextjs/). This one is different: it is an app we use, and one I keep maintaining. This post covers why it exists, how that weekend worked, what the agents added that I had not asked for, and where I overruled them.
 
 ## Why a wishlist
 
@@ -19,9 +19,9 @@ The list is useful beyond that. She can re-rank it whenever she wants, so a coup
 
 ## The third time
 
-The first version of this was a rudimentary sharing add-on to another app I was already self-hosting. What she liked was simple: her list was on her phone and on mine.
+The first tool was a list I added to a chore and task app I had built and was hosting myself. The sharing was rudimentary, but what she liked was simple: her list was on her phone and on mine.
 
-Then the old laptop where I was hosting that app crashed. I did not have the home server setup I have now, so we moved to [Craft](https://www.craft.do/), a notes app with checklists. That worked, but I wanted to get back to something I had written myself and that was built for this one purpose.
+Then the old laptop where I was hosting that app crashed. I did not have the home server setup I have now, so we moved to [Craft](https://www.craft.do/), a notes app with checklists. It is someone else's product, and it worked. But I wanted to get back to something I had written myself, and this time something built for this one purpose.
 
 That meant asking her to move a third time, and it became my most important consideration while building. It had to be something I could sell her on as worth having. In practice that meant three things:
 
@@ -41,11 +41,21 @@ Three parts of that process are worth describing.
 
 **Testing on the right screen.** [T3 Code](https://t3.codes/), the tool I ran the agents in, can [hand an agent an iOS Simulator](https://github.com/pingdotgg/t3code/blob/main/docs/user/devices.md). I used one on my Mac set to her phone model. It was a simulator, not her phone, and the runs were patchy: several were blocked by the tooling. One that did run found that the amount field ended up hidden behind the keyboard when you tapped into it. That was fixed before the release, with an automated browser test that fails on the old code. The retest on the simulator was blocked too, so the fix went out on the strength of that test.
 
-## Two decisions
+## What the agents added
 
-When you add a wish there is a button labelled "Paste link". Tap it and the app reads your clipboard and attaches the link. If it cannot read the clipboard, or there is no link on it, it adds an empty row where you can paste or type the link instead. It is nothing novel, and I have seen it in other apps. It is also a feature I would not have thought to include, and it works as easily on a phone as anywhere else. The agents added it.
+Two details in the app were not on my list. The agents included them, and I found out by using it.
 
-The second decision went the other way. A week later, while designing how lists would be shared with other people, the agents proposed an extra safeguard in the database for the case where an older version of the app is deployed by mistake. I turned it down in favour of a simpler rule about which versions are allowed to be deployed. The app is very early and had two users, and I felt that was the pragmatic choice.
+The first is a button labelled "Paste link" on the screen where you add a wish. Tap it and the app reads your clipboard and attaches the link. If it cannot read the clipboard, or there is no link on it, it adds an empty row where you can paste or type the link instead. It is nothing novel, and I have seen it in other apps. It is also a feature I would not have thought to include, and it works as easily on a phone as anywhere else.
+
+The second I noticed later. I started a new wish, left the page, and came back to find it still there under a note reading "Restored your unsaved wish." The app keeps an unsaved wish in the browser until you save or discard it.
+
+## Where I overruled them
+
+It went the other way too. A week later, while designing how lists would be shared with other people, the agents proposed an extra safeguard in the database for the case where an older version of the app is deployed by mistake. I turned it down in favour of a simpler rule about which versions are allowed to be deployed. The app is very early and had two users, and I felt that was the pragmatic choice.
+
+The other case was session replay, which records what happens on screen so that a visit can be watched back. While adding analytics to Thelo, we used this site's setup as a reference. The agent recommended against replay on this site, which made sense, and it is off here. It then carried the same recommendation over to Thelo, and there I disagreed. The only registered users are my partner and me, and I want replay available so I can dogfood this kind of tool and see whether it shows me anything about how the app is used. Two people is a tiny sample, and I know that.
+
+So replay is on for signed-in members only. Guests in the demo and visitors who are not signed in are never recorded, though the demo does send ordinary usage analytics such as page views and clicks. Holding that line took a good deal of local testing, more than I expected from what I had thought of as adding an SDK and a few settings.
 
 ## How it landed
 
