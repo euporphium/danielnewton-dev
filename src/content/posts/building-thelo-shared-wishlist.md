@@ -1,7 +1,7 @@
 ---
 title: "Building Thelo: a shared wishlist, for the third time"
 description: "Why I built a wishlist app for two people, how AI coding agents built most of it in a weekend, and which decisions were still mine to make."
-pubDatetime: 2026-11-15T23:00:00-06:00
+pubDatetime: 2026-11-16T01:00:00-06:00
 tags: [ai-agents, pwa, homelab]
 ---
 
@@ -43,7 +43,7 @@ Three parts of that process are worth describing.
 
 ## Two decisions
 
-When you add a wish there is a button labelled "Paste link". Tap it and the app reads your clipboard and attaches the link. If it cannot read the clipboard, or there is no link on it, it adds an empty row and puts the cursor there so you can paste or type. It is nothing novel, and I have seen it in other apps. It is also a feature I would not have thought to include, and it works as easily on a phone as anywhere else. The agents added it.
+When you add a wish there is a button labelled "Paste link". Tap it and the app reads your clipboard and attaches the link. If it cannot read the clipboard, or there is no link on it, it adds an empty row where you can paste or type the link instead. It is nothing novel, and I have seen it in other apps. It is also a feature I would not have thought to include, and it works as easily on a phone as anywhere else. The agents added it.
 
 The second decision went the other way. A week later, while designing how lists would be shared with other people, the agents proposed an extra safeguard in the database for the case where an older version of the app is deployed by mistake. I turned it down in favour of a simpler rule about which versions are allowed to be deployed. The app is very early and had two users, and I felt that was the pragmatic choice.
 
@@ -56,8 +56,6 @@ After that I had to convince her to open it. Once she did, she liked it, and rig
 ## Try it
 
 Thelo has no sign-up page. I create accounts by hand, and I do not expect it to have many users. But I wanted it to be something you can try, so the following weekend I added a demo, along with sharing a list by invite and read-only public links.
-
-[[DANIEL: the demo is not switched on in production yet. Remove this marker once "Try the demo" shows on the sign-in page.]]
 
 On the [sign-in page](https://thelo.i258.net/login), "Try the demo" creates a temporary guest account with fictional lists: your own, a fictional partner's, and one you share. Photo uploads, sharing and title lookup are switched off for guests. The demo ends after 24 hours and its data is then deleted.
 
