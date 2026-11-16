@@ -59,9 +59,11 @@ Part of her hesitation about moving again was reliability, since the first app c
 
 She has been updating her list a good deal over the last few days. She had not been maintaining it actively in Craft, likely because of that extra step.
 
-## Where I overruled them
+## The following weekend
 
 The following weekend's work was bigger and I planned it differently: three larger pieces (shared lists, a guest demo and read-only public links), each broken into stories, with three releases to production that each waited on my approval.
+
+## Where I overruled them
 
 What I was learning in all of this was orchestration, and how to let agents work more on their own. So it is relevant where they aim for 100% when that may not be pragmatic.
 
