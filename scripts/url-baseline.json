@@ -4,6 +4,7 @@
     "https://www.danielnewton.dev/",
     "https://www.danielnewton.dev/blog/",
     "https://www.danielnewton.dev/blog/astro-tailwind-prettier-formatting/",
+    "https://www.danielnewton.dev/blog/building-thelo-shared-wishlist/",
     "https://www.danielnewton.dev/blog/dark-mode-astro-tailwind-fouc/",
     "https://www.danielnewton.dev/blog/implementing-figma-community-design-nextjs/",
     "https://www.danielnewton.dev/blog/proxmox-cloud-init/",
@@ -11,7 +12,8 @@
     "https://www.danielnewton.dev/blog/test-the-npm-package-you-publish/",
     "https://www.danielnewton.dev/privacy/",
     "https://www.danielnewton.dev/projects/",
-    "https://www.danielnewton.dev/projects/movement-studios/"
+    "https://www.danielnewton.dev/projects/movement-studios/",
+    "https://www.danielnewton.dev/projects/thelo/"
   ],
   "rssGuids": [
     "https://www.danielnewton.dev/blog/react-marquee-component/",
@@ -19,7 +21,8 @@
     "https://www.danielnewton.dev/blog/proxmox-cloud-init/",
     "https://www.danielnewton.dev/blog/astro-tailwind-prettier-formatting/",
     "https://www.danielnewton.dev/blog/dark-mode-astro-tailwind-fouc/",
-    "https://www.danielnewton.dev/blog/test-the-npm-package-you-publish/"
+    "https://www.danielnewton.dev/blog/test-the-npm-package-you-publish/",
+    "https://www.danielnewton.dev/blog/building-thelo-shared-wishlist/"
   ],
   "files": [
     "/rss.xml",
@@ -28,6 +31,7 @@
   ],
   "postDates": {
     "https://www.danielnewton.dev/blog/astro-tailwind-prettier-formatting/": "2025-06-05",
+    "https://www.danielnewton.dev/blog/building-thelo-shared-wishlist/": "2026-11-16",
     "https://www.danielnewton.dev/blog/dark-mode-astro-tailwind-fouc/": "2025-06-06",
     "https://www.danielnewton.dev/blog/implementing-figma-community-design-nextjs/": "2026-03-08",
     "https://www.danielnewton.dev/blog/proxmox-cloud-init/": "2025-06-08",
