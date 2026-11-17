@@ -57,11 +57,11 @@ Seeing "Paste link" in the first build was part of what prompted me to commissio
 
 ## How it landed
 
-I wanted the move to take as little effort from her as possible. So I saved her password in our shared password manager and logged into the app on her phone before telling her about it. As soon as it was on there I told her, more or less: "Thelo is on your phone ready to go. I already logged in for you too, so you can just jump right in."
+I wanted the move to take as little effort from her as possible. So I saved her password in our shared password manager and logged into the app on her phone. As soon as it was on there I told her, more or less: "Thelo is on your phone ready to go. I already logged in for you too, so you can just jump right in."
 
 Part of her hesitation about moving again was reliability, since the first app crashing is what forced the move to Craft. When she first opened Thelo she really liked the look, and she appreciated that her full list was already there. Opening Thelo is also a more direct way to manage the list than opening Craft and finding the right document. She prefers the interface to both earlier tools and finds it the easiest to use.
 
-She has 32 items on her list, and about half of them she added after the new app was available. She had not been maintaining it actively in Craft, and I think that extra step is likely why.
+She has 32 items on her list, and about half of them she added after the new app was available. She had not been maintaining it actively in Craft, and I think that extra step is why.
 
 ## Where I overruled them
 
@@ -79,7 +79,7 @@ Guests in the demo and visitors who are not signed in are never recorded, though
 
 ## What I learned
 
-The first build and the later sharing and demo work were some of the longest-running orchestrations I have tried to manage. Compute became the bottleneck before inference did: the included GitHub Actions minutes ran out, because repeated runs of the end-to-end tests on pull requests depleted that bank quickly. So the lesson may not be about AI at all. When I scale up personal work I need a plan for that, and I will likely set up a build agent in my homelab to avoid those costs.
+The first build and the later sharing and demo work were some of the longest-running orchestrations I have tried to manage. Compute became the bottleneck before inference did: the included GitHub Actions minutes ran out because of repeated runs of the end-to-end tests on pull requests. So the lesson may not be about AI at all. When I scale up personal work I need a plan for that, and I will likely set up a build agent in my homelab to avoid those costs.
 
 I also want better hygiene with git and worktrees locally as agents move around, and more work running in parallel. A full day of intermittent prompting can be hard to keep up with.
 
